@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="882px" height="760px" viewBox="0 0 882 760" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>storyboards 2</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs>
+        <filter x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" id="filter-1">
+            <feMorphology radius="1" in="SourceAlpha" operator="dilate" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="5" dy="3" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.7 0" in="shadowBlurOuter1" type="matrix" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <filter x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" id="filter-2">
+            <feMorphology radius="1" in="SourceAlpha" operator="dilate" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="5" dy="3" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.7 0" in="shadowBlurOuter1" type="matrix" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <filter x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" id="filter-3">
+            <feMorphology radius="1" in="SourceAlpha" operator="dilate" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="5" dy="3" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.7 0" in="shadowBlurOuter1" type="matrix" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <filter x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" id="filter-4">
+            <feMorphology radius="1" in="SourceAlpha" operator="dilate" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="5" dy="3" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.7 0" in="shadowBlurOuter1" type="matrix" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <filter x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" id="filter-5">
+            <feMorphology radius="1" in="SourceAlpha" operator="dilate" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="5" dy="3" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.7 0" in="shadowBlurOuter1" type="matrix" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <filter x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" id="filter-6">
+            <feMorphology radius="1" in="SourceAlpha" operator="dilate" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="5" dy="3" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.7 0" in="shadowBlurOuter1" type="matrix" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <filter x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" id="filter-7">
+            <feMorphology radius="1" in="SourceAlpha" operator="dilate" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="5" dy="3" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.7 0" in="shadowBlurOuter1" type="matrix" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <filter x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox" id="filter-8">
+            <feMorphology radius="1" in="SourceAlpha" operator="dilate" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="5" dy="3" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.7 0" in="shadowBlurOuter1" type="matrix" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <rect d="M3.99318245,588 C-0.421330321,588 -4,591.589915 -4,595.999783 L-4,750.000217 C-4,754.418375 -0.4145397,758 3.99318245,758 L201.006818,758 C205.42133,758 209,754.410085 209,750.000217 L209,595.999783 C209,591.581625 205.41454,588 201.006818,588 L3.99318245,588 Z M3.99318245,588" id="Rectangle-1" stroke="#979797" fill="#D8D8D8" filter="url(#filter-1)" sketch:type="MSShapeGroup" x="-4" y="588" width="213" height="170" rx="8"></rect>
+        <rect d="M383.993182,588 C379.57867,588 376,591.589915 376,595.999783 L376,750.000217 C376,754.418375 379.58546,758 383.993182,758 L581.006818,758 C585.42133,758 589,754.410085 589,750.000217 L589,595.999783 C589,591.581625 585.41454,588 581.006818,588 L383.993182,588 Z M383.993182,588" id="Rectangle-1" stroke="#979797" fill="#D8D8D8" filter="url(#filter-2)" sketch:type="MSShapeGroup" x="376" y="588" width="213" height="170" rx="8"></rect>
+        <path d="M202.199997,572 L389.199997,572" id="Line" stroke="#979797" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" sketch:type="MSShapeGroup"></path>
+        <path d="M202.199997,572 L389.199997,572" id="Line" stroke="#979797" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" sketch:type="MSShapeGroup"></path>
+        <path d="M298,561 L298,568.953488" id="Line" stroke="#979797" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" sketch:type="MSShapeGroup"></path>
+        <path d="M201,572.046512 L201,587.953488" id="Line" stroke="#979797" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" sketch:type="MSShapeGroup"></path>
+        <path d="M391,572.046512 L391,587.953488" id="Line" stroke="#979797" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" sketch:type="MSShapeGroup"></path>
+        <path d="M208,180.255814 L208,267.744186" id="Line" stroke="#979797" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" sketch:type="MSShapeGroup"></path>
+        <path d="M490,180.255814 L490,267.744186" id="Line" stroke="#979797" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" sketch:type="MSShapeGroup"></path>
+        <path d="M490,102.253289 L490,178.746711" id="Line" stroke="#979797" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" sketch:type="MSShapeGroup"></path>
+        <path d="M766,180.255814 L766,267.744186" id="Line" stroke="#979797" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" sketch:type="MSShapeGroup"></path>
+        <path d="M490,362 L490,369.953488" id="Line" stroke="#979797" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" sketch:type="MSShapeGroup"></path>
+        <path d="M393,373.046512 L393,388.953488" id="Line" stroke="#979797" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" sketch:type="MSShapeGroup"></path>
+        <path d="M583,373.046512 L583,388.953488" id="Line" stroke="#979797" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" sketch:type="MSShapeGroup"></path>
+        <rect d="M391.993182,0 C387.57867,0 384,3.58991496 384,7.99978289 L384,162.000217 C384,166.418375 387.58546,170 391.993182,170 L589.006818,170 C593.42133,170 597,166.410085 597,162.000217 L597,7.99978289 C597,3.5816248 593.41454,0 589.006818,0 L391.993182,0 Z M391.993182,0" id="Rectangle-1" stroke="#979797" fill="#D8D8D8" filter="url(#filter-3)" sketch:type="MSShapeGroup" x="384" y="0" width="213" height="170" rx="8"></rect>
+        <rect d="M666.993182,190 C662.57867,190 659,193.589915 659,197.999783 L659,352.000217 C659,356.418375 662.58546,360 666.993182,360 L864.006818,360 C868.42133,360 872,356.410085 872,352.000217 L872,197.999783 C872,193.581625 868.41454,190 864.006818,190 L666.993182,190 Z M666.993182,190" id="Rectangle-1" stroke="#979797" fill="#D8D8D8" filter="url(#filter-4)" sketch:type="MSShapeGroup" x="659" y="190" width="213" height="170" rx="8"></rect>
+        <rect d="M391.993182,190 C387.57867,190 384,193.589915 384,197.999783 L384,352.000217 C384,356.418375 387.58546,360 391.993182,360 L589.006818,360 C593.42133,360 597,356.410085 597,352.000217 L597,197.999783 C597,193.581625 593.41454,190 589.006818,190 L391.993182,190 Z M391.993182,190" id="Rectangle-1" stroke="#979797" fill="#D8D8D8" filter="url(#filter-5)" sketch:type="MSShapeGroup" x="384" y="190" width="213" height="170" rx="8"></rect>
+        <rect d="M108.993182,190 C104.57867,190 101,193.589915 101,197.999783 L101,352.000217 C101,356.418375 104.58546,360 108.993182,360 L306.006818,360 C310.42133,360 314,356.410085 314,352.000217 L314,197.999783 C314,193.581625 310.41454,190 306.006818,190 L108.993182,190 Z M108.993182,190" id="Rectangle-1" stroke="#979797" fill="#D8D8D8" filter="url(#filter-6)" sketch:type="MSShapeGroup" x="101" y="190" width="213" height="170" rx="8"></rect>
+        <path id="Line" stroke="#979797" stroke-linecap="square" sketch:type="MSShapeGroup" d="M486.563983,104.108571 L487.17828,104.872759"></path>
+        <path d="M208.204696,180 L765.795304,180" id="Line" stroke="#979797" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" sketch:type="MSShapeGroup"></path>
+        <text id="Home-Page" fill="#000000" sketch:type="MSTextLayer" font-family="Nanum Gothic" font-size="20" font-weight="bold" text-decoration="underline">
+            <tspan x="394" y="24">Home Page</tspan>
+        </text>
+        <text id="-a-toolbar-containin" fill="#000000" sketch:type="MSTextLayer" font-family="Nanum Gothic" font-size="16" font-weight="normal">
+            <tspan x="395" y="45">-a toolbar containing</tspan>
+            <tspan x="395" y="64">	-log in</tspan>
+            <tspan x="395" y="83">	-portfolio select</tspan>
+            <tspan x="395" y="102">	-portfolio creating</tspan>
+            <tspan x="395" y="121">	-Links to other pages</tspan>
+            <tspan x="395" y="140">	-trading strategy select</tspan>
+            <tspan x="395" y="159">-introduction</tspan>
+        </text>
+        <text id="Portfolio" fill="#000000" sketch:type="MSTextLayer" font-family="Nanum Gothic" font-size="20" font-weight="bold" text-decoration="underline">
+            <tspan x="394" y="214">Portfolio</tspan>
+        </text>
+        <text id="-Portfolio-creation" fill="#000000" sketch:type="MSTextLayer" font-family="Nanum Gothic" font-size="16" font-weight="normal">
+            <tspan x="395" y="238">-Portfolio creation</tspan>
+            <tspan x="395" y="257">	functionality</tspan>
+            <tspan x="395" y="276">-Portfolio Selection</tspan>
+            <tspan x="395" y="295">	-Each portfolio has</tspan>
+            <tspan x="395" y="314">	     links to Cash</tspan>
+            <tspan x="395" y="333">	     and Stocks</tspan>
+        </text>
+        <text id="Stats" fill="#000000" sketch:type="MSTextLayer" font-family="Nanum Gothic" font-size="20" font-weight="bold" text-decoration="underline">
+            <tspan x="14" y="616">Stats</tspan>
+        </text>
+        <text id="-coefficient,-variat" fill="#000000" sketch:type="MSTextLayer" font-family="Nanum Gothic" font-size="16" font-weight="normal">
+            <tspan x="15" y="640">-coefficient, variation,</tspan>
+            <tspan x="15" y="659">	Beta, of each stock</tspan>
+            <tspan x="15" y="678">-covariance/correlation</tspan>
+            <tspan x="15" y="697">	matrix</tspan>
+            <tspan x="15" y="716">-Total Beta</tspan>
+        </text>
+        <text id="Single-Stock" fill="#000000" sketch:type="MSTextLayer" font-family="Nanum Gothic" font-size="20" font-weight="bold" text-decoration="underline">
+            <tspan x="394" y="614">Single Stock</tspan>
+        </text>
+        <text id="-Enter-daily-informa" fill="#000000" sketch:type="MSTextLayer" font-family="Nanum Gothic" font-size="16" font-weight="normal">
+            <tspan x="397" y="638">-Enter daily information</tspan>
+            <tspan x="397" y="657">-View past performance</tspan>
+            <tspan x="397" y="676">	-manual interval</tspan>
+            <tspan x="397" y="695">	-current &amp; historic</tspan>
+            <tspan x="397" y="714">-Predicted outcome</tspan>
+        </text>
+        <rect d="M198.993182,389 C194.57867,389 191,392.589915 191,396.999783 L191,551.000217 C191,555.418375 194.58546,559 198.993182,559 L396.006818,559 C400.42133,559 404,555.410085 404,551.000217 L404,396.999783 C404,392.581625 400.41454,389 396.006818,389 L198.993182,389 Z M198.993182,389" id="Rectangle-1" stroke="#979797" fill="#D8D8D8" filter="url(#filter-7)" sketch:type="MSShapeGroup" x="191" y="389" width="213" height="170" rx="8"></rect>
+        <rect d="M578.993182,389 C574.57867,389 571,392.589915 571,396.999783 L571,551.000217 C571,555.418375 574.58546,559 578.993182,559 L776.006818,559 C780.42133,559 784,555.410085 784,551.000217 L784,396.999783 C784,392.581625 780.41454,389 776.006818,389 L578.993182,389 Z M578.993182,389" id="Rectangle-1" stroke="#979797" fill="#D8D8D8" filter="url(#filter-8)" sketch:type="MSShapeGroup" x="571" y="389" width="213" height="170" rx="8"></rect>
+        <path d="M394.199997,373 L581.199997,373" id="Line" stroke="#979797" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" sketch:type="MSShapeGroup"></path>
+        <path d="M394.199997,373 L581.199997,373" id="Line" stroke="#979797" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" sketch:type="MSShapeGroup"></path>
+        <text id="Stocks" fill="#000000" sketch:type="MSTextLayer" font-family="Nanum Gothic" font-size="20" font-weight="bold" text-decoration="underline">
+            <tspan x="204" y="424">Stocks</tspan>
+        </text>
+        <text id="-List-of-all-portfol" fill="#000000" sketch:type="MSTextLayer" font-family="Nanum Gothic" font-size="16" font-weight="normal">
+            <tspan x="199" y="448">-List of all portfolio stocks</tspan>
+            <tspan x="199" y="467">-Buy/Sell/Add new stocks</tspan>
+            <tspan x="199" y="486">-Amount in account</tspan>
+            <tspan x="199" y="505">-Total Beta</tspan>
+        </text>
+        <text id="Cash" fill="#000000" sketch:type="MSTextLayer" font-family="Nanum Gothic" font-size="20" font-weight="bold" text-decoration="underline">
+            <tspan x="584" y="414">Cash</tspan>
+        </text>
+        <text id="-Overview-of-Account" fill="#000000" sketch:type="MSTextLayer" font-family="Nanum Gothic" font-size="16" font-weight="normal">
+            <tspan x="585" y="438">-Overview of Account $$</tspan>
+            <tspan x="585" y="457">-Add/Withdraw $$</tspan>
+            <tspan x="585" y="476">-Estimated market value</tspan>
+            <tspan x="585" y="495">-Volatility and correlation</tspan>
+            <tspan x="585" y="514">	of whole portfolio.</tspan>
+            <tspan x="585" y="533">		-cached</tspan>
+        </text>
+        <text id="Trading" fill="#000000" sketch:type="MSTextLayer" font-family="Nanum Gothic" font-size="20" font-weight="bold" text-decoration="underline">
+            <tspan x="681" y="215">Trading</tspan>
+        </text>
+        <text id="-Description-of-each" fill="#000000" sketch:type="MSTextLayer" font-family="Nanum Gothic" font-size="16" font-weight="normal">
+            <tspan x="682" y="239">-Description of each </tspan>
+            <tspan x="682" y="258">	trading strategy</tspan>
+            <tspan x="682" y="277">-Outcome of current</tspan>
+            <tspan x="682" y="296">	strategies </tspan>
+        </text>
+        <text id="Accounts" fill="#000000" sketch:type="MSTextLayer" font-family="Nanum Gothic" font-size="20" font-weight="bold" text-decoration="underline">
+            <tspan x="124" y="214">Accounts</tspan>
+        </text>
+        <text id="-Login-functionality" fill="#000000" sketch:type="MSTextLayer" font-family="Nanum Gothic" font-size="16" font-weight="normal">
+            <tspan x="116" y="242">-Login functionality</tspan>
+            <tspan x="116" y="261">-registration functionality</tspan>
+            <tspan x="116" y="280"></tspan>
+        </text>
+    </g>
+</svg>
