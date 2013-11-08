@@ -20,7 +20,8 @@ my $username = 'Moritz';
 
 
 # open the HTML Template
-my $template = HTML::Template->new(filename => 'home.tmpl');
+my $baseTemplate = HTML::Template->new(filename => 'home.tmpl');
+#my $portfolioTemplate = HTML::Template->new(filename => 'porfolio.tmpl');
 
 parse_cookie();
 
@@ -44,18 +45,8 @@ if (defined(param("act"))) {
   $run = 1;
 }
 
-# Handle actions
-if ($action eq 'login') {
-		$loggedin = 1;
-} elsif ($action eq 'logout') {
-		$loggedin = 0;
-}
-
-# bake the updated cookie right before we display the HTML
-bake_cookie();
-
 # set template parameters
-$template->param(
+$baseTemplate->param(
 	LOGGEDIN => $loggedin,
 	USERNAME => $username,
 	PORTFOLIO_NAMES => [ 
@@ -63,9 +54,23 @@ $template->param(
 					       { name => 'myPortfolio' },
                        ]
 );
-# print template output
-print $template->output;
 
+# bake the updated cookie right before we display the HTML
+bake_cookie();
+
+# Handle actions
+if ($action eq 'login') {
+		$loggedin = 1;
+		# print template output
+		print $baseTemplate->output;
+} elsif ($action eq 'logout') {
+		$loggedin = 0;
+		$baseTemplate->param(LOGGEDIN => $loggedin);
+		# print template output
+		print $baseTemplate->output;
+} elsif ($action eq 'base') {
+		print $baseTemplate->output;
+}
 
 # The following is necessary so that DBD::Oracle can
 # find its butt
