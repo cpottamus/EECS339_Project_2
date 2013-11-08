@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <title>Test</title>
+    <link rel="stylesheet" type="text/css" href="./portfolio.css" />
+    <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="portfolio.js"></script>
+  </head>
+  <body>
+    <div id='main-content'>
+      <div id='login-container' class='navbar navbar-inverse navbar-fixed-top'>
+	<div class='navbar-header'>
+	  <a class='navbar-brand'>Portfolio Manager</a>
+	</div>
+	<div class="navbar-collapse collapse">
+	   <ul class="nav navbar-nav">
+	     <li class="dropdown">
+	       <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Portfolios<b class="caret"></b></a>
+	       <ul class="dropdown-menu">
+		 <li><a href="portfolio.pl?act=createNewPortfolio">Create New...</a></li>
+		 <li class="divider"></li>
+		 <TMPL_LOOP NAME=PORTFOLIO_NAMES>
+		   <li><a href=<TMPL_VAR NAME=OVERVIEWLINK> ><TMPL_VAR NAME=NAME></a></li>
+		 </TMPL_LOOP>
+	       </ul>
+	     </li>
+	   </ul>
+	   <div class='navbar-right'>
+	     <p class="navbar-text">Signed in as <TMPL_VAR NAME=USERNAME>. <a href="#" class="navbar-link" id='logoutBtn'>Log out</a></p>
+	   </div>
+       </div>
+     </div>
+
+     <div>
+       <h1> Portfolio Management and Performance </h1>
+       <h3> Total Cash in Acct.: 40k$ </h3>
+       <form action='portfolio.pl' name='cashAcctMovements'>
+	 <button class='btn' id='depositBtn'>Deposit</button>
+	 <button class='btn' id='withdrawBtn'>Withdraw</button>
+	 <input type='text'>Amt. ($)</input>
+       </form>
+     </div>
+     <!-- bogus form for logout action -->
+     <form id='logoutForm' action='portfolio.pl'><input type='hidden' name='act' value='logout' /></form>
+     
+   </div>
+   </body>
+</html>
