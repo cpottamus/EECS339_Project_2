@@ -14,16 +14,13 @@ my @sqlinput = ();
 my @sqloutput = ();
 
 # state variables
-my $loggedin = 0;
+my $loggedin = 1;
 my $username = 'Moritz';
-
 
 
 # open the HTML Template
 my $baseTemplate = HTML::Template->new(filename => 'home.tmpl');
-#my $portfolioTemplate = HTML::Template->new(filename => 'porfolio.tmpl');
-
-parse_cookie();
+my $overviewTemplate = HTML::Template->new(filename => 'overview.tmpl');
 
 #
 # Get the user action and whether he just wants the form or wants us to
@@ -32,6 +29,7 @@ parse_cookie();
 my $action;
 my $run;
 my $cookie = undef;
+parse_cookie();
 
 if (defined(param("act"))) { 
   $action=param("act");
@@ -50,25 +48,52 @@ $baseTemplate->param(
 	LOGGEDIN => $loggedin,
 	USERNAME => $username,
 	PORTFOLIO_NAMES => [ 
-                           { name => 'conservative'},
-					       { name => 'myPortfolio' },
+                           { 	name => 'conservative',
+								overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
+					       { 	name => 'myPortfolio',
+								overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
                        ]
 );
-
-# bake the updated cookie right before we display the HTML
-bake_cookie();
 
 # Handle actions
 if ($action eq 'login') {
 		$loggedin = 1;
-		# print template output
+		# bake the updated cookie and render template
+		bake_cookie();
 		print $baseTemplate->output;
 } elsif ($action eq 'logout') {
 		$loggedin = 0;
+		# bake the updated cookie and render template
+		bake_cookie();
 		$baseTemplate->param(LOGGEDIN => $loggedin);
 		# print template output
 		print $baseTemplate->output;
 } elsif ($action eq 'base') {
+		# bake the updated cookie and render template
+		bake_cookie();
+		print $baseTemplate->output;
+}
+# all of these actions should only be processed if the user is logged in
+elsif ($loggedin == 1) {
+	if ($action eq 'createNewPortfolio') {
+		
+	} elsif ($action eq 'overview') {
+			## TODO: dynamically populate this info based on DB info
+			$overviewTemplate->param(
+				USERNAME => $username,
+				PORTFOLIO_NAMES => [ 
+                           { 	name => 'conservative',
+								overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
+					       { 	name => 'myPortfolio',
+								overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
+                       ]
+			);
+			
+			# bake the updated cookie and render template
+			bake_cookie();
+			print $overviewTemplate->output;
+	}
+} else {
 		print $baseTemplate->output;
 }
 
