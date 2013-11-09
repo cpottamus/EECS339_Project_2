@@ -1,0 +1,78 @@
+<html>
+<head>
+	<title>Test</title>
+	<link rel="stylesheet" type="text/css" href="./portfolio.css" />
+	<link href="css/bootstrap.css" rel="stylesheet" media="screen">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="portfolio.js"></script>
+</head>
+<body>
+	<div id='nav bar'>
+		<div id='login-container' class='navbar navbar-inverse navbar-fixed-top'>
+			<div class='navbar-header'>
+					<a class='navbar-brand' href="portfolio.pl?">Portfolio Manager</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<TMPL_UNLESS NAME='LOGGEDIN'>
+					<form id='loginForm' name='loginForm' action='portfolio.pl' class='navbar-form navbar-right'>
+						<div class="form-group">
+							<input type='text' name='user' placeholder='Username' class='form-control' />
+						</div>
+						<div class="form-group">
+							<input type='password' name='pwd' placeholder='Password' class='form-control' />
+						</div>
+						<input type='hidden' name='act' value='login' />
+						<button id='loginBtn' class='btn btn-success'>Log In</button>
+						<button id='registerBtn' class='btn'>Register</a>
+					</form>
+				<TMPL_ELSE>
+					<ul class="nav navbar-nav">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">My Portfolios<b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="portfolio.pl?act=createNewPortfolio">Create New...</a></li>
+								<li class="divider"></li>
+								<TMPL_LOOP NAME=PORTFOLIO_NAMES>
+									<li><a href=<TMPL_VAR NAME=OVERVIEWLINK> ><TMPL_VAR NAME=NAME></a></li>
+								</TMPL_LOOP>
+							</ul>
+						</li>
+					</ul>
+					<div class='navbar-right'>
+						<p class="navbar-text">Signed in as <TMPL_VAR NAME=USERNAME>. <a href="#" class="navbar-link" id='logoutBtn'>Log out</a></p>
+					</div>
+				</TMPL_UNLESS>
+			</div>
+		</div>
+	</div>
+
+	<!-- Page content below this point -->
+
+	<div class="jumbotron">
+		<h1>Trading Strategies</h1>
+		<div class="container">
+			<h2>Shannon Ratchet</h2>
+			<p>The Shannon Ratchet trading strategy keeps exactly the same market value in the stock and the cash, buying and selling stocks to do so. Claude Shannon proposed this strategy in response to the "efficient market hypothesis", which argues that since markets already incorporate all information into prices, the prices must be efficient and thus the price of a stock is really a random walk. Ratchet converts volatility in the walks into gains, utilizing unpredictability.</p>
+			<p> To select this trading strategy, make sure you are logged in, and then in the toolbar at the top of the page, click the "trading strategy" drop-down, and verify that "Shannon-Ratchet" is checked on the list.</p>
+		</div>
+	</div>	
+	<hr>
+	<div class="jumbotron">
+		<div class="container">
+			<a href='portfolio.pl?act=tradingStrategy'><h2>Trading Strategies</h2></a>
+			<p>Click here to read more about our trading strategies, select which ones you like, and see predicted portfolio outcome under your current strategies!</p>
+		</div>
+	</div>
+	<hr>
+	<div class="jumbotron">
+		<div class="container">
+			<h2>Web Information</h2>
+			<p>This will either include all of our SVG/PNG of sitemaps and mockups, or a link to the page that will</p>
+		</div>
+	</div>
+	
+	<!-- bogus form for logout action -->
+	<form id='logoutForm' action='portfolio.pl'><input type='hidden' name='act' value='logout' /></form>
+</body>
+</html>
