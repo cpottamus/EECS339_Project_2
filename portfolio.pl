@@ -21,7 +21,7 @@ my $username = 'Moritz';
 # open the HTML Template
 my $baseTemplate = HTML::Template->new(filename => 'home.tmpl');
 my $overviewTemplate = HTML::Template->new(filename => 'overview.tmpl');
-my $tradingStrategyTemplate = HTML::Template->new(filename => 'tradingStrategy.tmpl')
+my $tradingStrategyTemplate = HTML::Template->new(filename => 'tradingStrategy.tmpl');
 
 #
 # Get the user action and whether he just wants the form or wants us to
