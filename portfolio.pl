@@ -19,6 +19,7 @@ my $username = 'Moritz';
 
 
 # open the HTML Template
+my $toolbarTemplate = HTML::Template->new(filename => 'toolbar.tmpl')
 my $baseTemplate = HTML::Template->new(filename => 'home.tmpl');
 my $overviewTemplate = HTML::Template->new(filename => 'overview.tmpl');
 my $tradingStrategyTemplate = HTML::Template->new(filename => 'tradingStrategy.tmpl');
@@ -48,7 +49,7 @@ if (defined(param("act"))) {
 }
 
 # set template parameters
-$baseTemplate->param(
+$toolbarTemplate->param(
 
     #Toolbar functionality
 	LOGGEDIN => $loggedin,
@@ -59,6 +60,7 @@ $baseTemplate->param(
 					       { 	name => 'myPortfolio',
 								overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
                        ]
+      TRADING_STRATEGIES => []
 
 );
 
@@ -86,15 +88,15 @@ elsif ($loggedin == 1) {
     		
     	} elsif ($action eq 'overview') {
     			## TODO: dynamically populate this info based on DB info
-    			$overviewTemplate->param(
-    				USERNAME => $username,
-    				PORTFOLIO_NAMES => [ 
-                               { 	name => 'conservative',
-    								overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
-    					       { 	name => 'myPortfolio',
-    								overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
-                           ]
-    			);
+    			# $overviewTemplate->param(
+    			# 	USERNAME => $username,
+    			# 	PORTFOLIO_NAMES => [ 
+       #                         { 	name => 'conservative',
+    			# 					overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
+    			# 		       { 	name => 'myPortfolio',
+    			# 					overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
+       #                     ]
+    			# );
     			
     			# bake the updated cookie and render template
     			bake_cookie();
@@ -106,6 +108,10 @@ elsif ($loggedin == 1) {
         elsif($action eq 'portMan'){
                   bake_cookie();
                   print $portManagementTemplate->output;
+        }
+        elsif($action eq 'singleStock'){
+                  bake_cookie();
+                  print $singleStockTemplate->output;
         }
 } 
 else {
