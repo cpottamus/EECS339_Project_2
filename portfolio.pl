@@ -22,6 +22,9 @@ my $username = 'Moritz';
 my $baseTemplate = HTML::Template->new(filename => 'home.tmpl');
 my $overviewTemplate = HTML::Template->new(filename => 'overview.tmpl');
 my $tradingStrategyTemplate = HTML::Template->new(filename => 'tradingStrategy.tmpl');
+my $portManagementTemplate = HTML::Template->new(filename => 'portMan.tmpl');
+my $singleStockTemplate = HTML::Template->new(filename => 'singleStock.tmpl');
+
 
 #
 # Get the user action and whether he just wants the form or wants us to
@@ -99,6 +102,10 @@ elsif ($loggedin == 1) {
     	}  elsif ($action eq 'tradingStrategy') {
                   bake_cookie();
                   print $tradingStrategyTemplate->output;
+        }
+        elsif($action eq 'portMan'){
+                  bake_cookie();
+                  print $portManagementTemplate->output;
         }
 } 
 else {

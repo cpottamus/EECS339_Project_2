@@ -8,10 +8,10 @@
 	<script type="text/javascript" src="portfolio.js"></script>
 </head>
 <body>
-	<div id='main-content'>
+	<div id='nav bar'>
 		<div id='login-container' class='navbar navbar-inverse navbar-fixed-top'>
 			<div class='navbar-header'>
-					<a class='navbar-brand'>Portfolio Manager</a>
+					<a class='navbar-brand' href="portfolio.pl?">Portfolio Manager</a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<TMPL_UNLESS NAME='LOGGEDIN'>
@@ -45,32 +45,29 @@
 				</TMPL_UNLESS>
 			</div>
 		</div>
-
-		<div class="jumbotron">
-			<h1>Portfolio Manager</h1>
-			<div class="container">
-				<h2>Introduction</h2>
-				<p>This is where we will describe the overview of our app and such. Lorem Ipsum</p>
-			</div>
-		</div>	
-		<hr>
-		<div class="jumbotron">
-			<div class="container">
-				<a href='portfolio.pl?act=tradingStrategy'><h2>Trading Strategies</h2></a>
-				<p>Click here to read more about our trading strategies, select which ones you like, and see predicted portfolio outcome under your current strategies!</p>
-			</div>
-		</div>
-		<hr>
-		<div class="jumbotron">
-			<div class="container">
-				<h2>Web Information</h2>
-				<p>This will either include all of our SVG/PNG of sitemaps and mockups, or a link to the page that will</p>
-			</div>
-		</div>
-		
-		<!-- bogus form for logout action -->
-		<form id='logoutForm' action='portfolio.pl'><input type='hidden' name='act' value='logout' /></form>
-		
 	</div>
+
+	<!-- Page content below this point -->
+
+	<div class="jumbotron">
+		<h1>Portfolio Manager</h1>
+		<div class="container">
+			<h2>Introduction</h2>
+			<p>This is where we will describe the overview of our app and such. Lorem Ipsum</p>
+		</div>	
+	<hr>
+		<div class="container">
+			<a href='portfolio.pl?act=tradingStrategy'><h2>Trading Strategies</h2></a>
+			<p>Click here to read more about our trading strategies, select which ones you like, and see predicted portfolio outcome under your current strategies!</p>
+		</div>
+	<hr>
+		<div class="container">
+			<h2>Web Information</h2>
+			<p>This will either include all of our SVG/PNG of sitemaps and mockups, or a link to the page that will</p>
+		</div>
+	</div>
+	
+	<!-- bogus form for logout action -->
+	<form id='logoutForm' action='portfolio.pl'><input type='hidden' name='act' value='logout' /></form>
 </body>
 </html>
