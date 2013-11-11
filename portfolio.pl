@@ -21,7 +21,7 @@ my $username = 'Moritz';
 
 # open the HTML Template
 
-my $toolbarTemplate = HTML::Template->new(filename => 'toolbar.tmpl')
+my $toolbarTemplate = HTML::Template->new(filename => 'toolbar.tmpl');
 my $baseTemplate = HTML::Template->new(filename => 'home.tmpl');
 my $overviewTemplate = HTML::Template->new(filename => 'overview.tmpl');
 my $tradingStrategyTemplate = HTML::Template->new(filename => 'tradingStrategy.tmpl');
@@ -110,7 +110,6 @@ if ($action eq 'login') {
 		print $registerTemplate->output;
 	}
 }
-
 # all of these actions should only be processed if the user is logged in
 elsif ($loggedin == 1) {
 	if ($action eq 'createNewPortfolio') {
