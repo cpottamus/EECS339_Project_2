@@ -20,20 +20,15 @@ my $username = 'Moritz';
 
 
 # open the HTML Template
-<<<<<<< HEAD
+
 my $toolbarTemplate = HTML::Template->new(filename => 'toolbar.tmpl')
 my $baseTemplate = HTML::Template->new(filename => 'home.tmpl');
 my $overviewTemplate = HTML::Template->new(filename => 'overview.tmpl');
 my $tradingStrategyTemplate = HTML::Template->new(filename => 'tradingStrategy.tmpl');
 my $portManagementTemplate = HTML::Template->new(filename => 'portMan.tmpl');
 my $singleStockTemplate = HTML::Template->new(filename => 'singleStock.tmpl');
-
-=======
-my $toolbarTemplate = HTML::Template->new(filename => 'toolbar.tmpl');
-my $baseTemplate = HTML::Template->new(filename => 'home.tmpl');
-my $overviewTemplate = HTML::Template->new(filename => 'overview.tmpl');
 my $registerTemplate = HTML::Template->new(filename => 'register.tmpl');
->>>>>>> fdd0db4013f3dd7cb87084e479c52985dea569a3
+
 
 #
 # Get the user action and whether he just wants the form or wants us to
@@ -64,41 +59,24 @@ $toolbarTemplate->param(
 	LOGGEDIN => $loggedin,
 	USERNAME => $username,
 	PORTFOLIO_NAMES => [ 
-<<<<<<< HEAD
-                           { 	name => 'conservative',
-								overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
-					       { 	name => 'myPortfolio',
-								overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
-                       ]
-      TRADING_STRATEGIES => []
-
-=======
 	    { 	name => 'conservative',
 		overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
 	    { 	name => 'myPortfolio',
 		overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
     ],
     TRADING_STRATEGIES => [
-		{ name => 'myStrat_A' },
+		{ name => 'Shannon_Ratchet' },
 		{ name => 'myStrat_B' }
     ]
->>>>>>> fdd0db4013f3dd7cb87084e479c52985dea569a3
 );
 
 # Handle actions
 if ($action eq 'login') {
-<<<<<<< HEAD
-    		$loggedin = 1;
-    		# bake the updated cookie and render template
-    		bake_cookie();
-    		print $baseTemplate->output;
-=======
 		$loggedin = 1;
 		# bake the updated cookie and render template
 		bake_cookie();
 		$baseTemplate->param(LOGGEDIN => $loggedin);
 		print $baseTemplate->output;
->>>>>>> fdd0db4013f3dd7cb87084e479c52985dea569a3
 } elsif ($action eq 'logout') {
     		$loggedin = 0;
     		# bake the updated cookie and render template
@@ -107,46 +85,6 @@ if ($action eq 'login') {
     		# print template output
     		print $baseTemplate->output;
 } elsif ($action eq 'base') {
-<<<<<<< HEAD
-    		# bake the updated cookie and render template
-    		bake_cookie();
-    		print $baseTemplate->output;
-}
-    # all of these actions should only be processed if the user is logged in
-elsif ($loggedin == 1) {
-    	if ($action eq 'createNewPortfolio') {
-    		
-    	} elsif ($action eq 'overview') {
-    			## TODO: dynamically populate this info based on DB info
-    			# $overviewTemplate->param(
-    			# 	USERNAME => $username,
-    			# 	PORTFOLIO_NAMES => [ 
-       #                         { 	name => 'conservative',
-    			# 					overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
-    			# 		       { 	name => 'myPortfolio',
-    			# 					overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
-       #                     ]
-    			# );
-    			
-    			# bake the updated cookie and render template
-    			bake_cookie();
-    			print $overviewTemplate->output;
-    	}  elsif ($action eq 'tradingStrategy') {
-                  bake_cookie();
-                  print $tradingStrategyTemplate->output;
-        }
-        elsif($action eq 'portMan'){
-                  bake_cookie();
-                  print $portManagementTemplate->output;
-        }
-        elsif($action eq 'singleStock'){
-                  bake_cookie();
-                  print $singleStockTemplate->output;
-        }
-} 
-else {
-  		print $baseTemplate->output;
-=======
 		# bake the updated cookie and render template
 		bake_cookie();
 		print $baseTemplate->output;
@@ -217,7 +155,6 @@ elsif ($loggedin == 1) {
 } else {
 		bake_cookie();
 		print $baseTemplate->output;
->>>>>>> fdd0db4013f3dd7cb87084e479c52985dea569a3
 }
 
 # The following is necessary so that DBD::Oracle can
