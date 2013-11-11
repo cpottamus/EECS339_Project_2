@@ -49,108 +49,108 @@ if (defined(param("act"))) {
 
 # set template parameters
 $baseTemplate->param(
-	LOGGEDIN => $loggedin,
-	USERNAME => $username,
-	PORTFOLIO_NAMES => [ 
-	    { 	name => 'conservative',
-		overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
-	    { 	name => 'myPortfolio',
-		overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
+        LOGGEDIN => $loggedin,
+        USERNAME => $username,
+        PORTFOLIO_NAMES => [ 
+            {         name => 'conservative',
+                overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
+            {         name => 'myPortfolio',
+                overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
     ],
     TRADING_STRATEGIES => [
-		{ name => 'myStrat_A' },
-		{ name => 'myStrat_B' }
+                { name => 'myStrat_A' },
+                { name => 'myStrat_B' }
     ]
 );
 
 # Handle actions
 if ($action eq 'login') {
-		$loggedin = 1;
-		# bake the updated cookie and render template
-		bake_cookie();
-		$baseTemplate->param(LOGGEDIN => $loggedin);
-		print $baseTemplate->output;
+                $loggedin = 1;
+                # bake the updated cookie and render template
+                bake_cookie();
+                $baseTemplate->param(LOGGEDIN => $loggedin);
+                print $baseTemplate->output;
 } elsif ($action eq 'logout') {
-		$loggedin = 0;
-		# bake the updated cookie and render template
-		bake_cookie();
-		$baseTemplate->param(LOGGEDIN => $loggedin);
-		# print template output
-		print $baseTemplate->output;
+                $loggedin = 0;
+                # bake the updated cookie and render template
+                bake_cookie();
+                $baseTemplate->param(LOGGEDIN => $loggedin);
+                # print template output
+                print $baseTemplate->output;
 } elsif ($action eq 'base') {
-		# bake the updated cookie and render template
-		bake_cookie();
-		print $baseTemplate->output;
+                # bake the updated cookie and render template
+                bake_cookie();
+                print $baseTemplate->output;
 } elsif ($action eq 'register') {
-	$registerTemplate->param(
-		LOGGEDIN => 0,
-		USERNAME => $username,
-		PORTFOLIO_NAMES => [ 
-			{ 	name => 'conservative',
-			overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
-			{ 	name => 'myPortfolio',
-			overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
-		],
-		TRADING_STRATEGIES => [
-			{ name => 'myStrat_A' },
-			{ name => 'myStrat_B' }
-		]
-	);
-	bake_cookie();
-	if ($run == 0) {
-		print $registerTemplate->output;
-	} else {
-		print $registerTemplate->output;
-	}
+        $registerTemplate->param(
+                LOGGEDIN => 0,
+                USERNAME => $username,
+                PORTFOLIO_NAMES => [ 
+                        {         name => 'conservative',
+                        overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
+                        {         name => 'myPortfolio',
+                        overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
+                ],
+                TRADING_STRATEGIES => [
+                        { name => 'myStrat_A' },
+                        { name => 'myStrat_B' }
+                ]
+        );
+        bake_cookie();
+        if ($run == 0) {
+                print $registerTemplate->output;
+        } else {
+                print $registerTemplate->output;
+        }
 }
 
 # all of these actions should only be processed if the user is logged in
 elsif ($loggedin == 1) {
-	if ($action eq 'createNewPortfolio') {
-		
-	} elsif (($action eq 'overview') or ($action eq 'depositOrWithdrawCash')) {
-			## TODO: dynamically populate this info based on DB info
-			$overviewTemplate->param(
-				LOGGEDIN => $loggedin,
-				USERNAME => $username,
-				PORTFOLIO_NAMES => [ 
-						{ 	name => 'conservative',
-							overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
-						{   name => 'myPortfolio',
-							overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
-				],
-				TRADING_STRATEGIES => [
-					{ name => 'myStrat_A' },
-					{ name => 'myStrat_B' }
-				],
-				CUR_PORTFOLIO => $pfname,
-				CASH_IN_ACCT => 40000,
-				PORTFOLIO_VAL => 10000,
-				PORTFOLIO_AVG_VOL => 0.5,
-				PORTFOLIO_AVG_CORR => 0.8
-			);
-			if ($action eq 'overview') {
-				# bake the updated cookie and render template
-				bake_cookie();
-				print $overviewTemplate->output;
-			}
-			elsif ($action eq 'depositOrWithdrawCash') {
-				if (param('type') eq 'deposit') {
-					#continue;
-						## TODO: UPDATE DB HERE
-				} elsif (param('type') eq 'withdraw') {
-					#continue;
-						## TODO: UPDATE DB HERE
-				}
-				bake_cookie();
-				## TODO: MAKE THIS DYNAMIC
-				$overviewTemplate->param(CASH_IN_ACCT => 30000);
-				print $overviewTemplate->output;
-			}
-	}
+        if ($action eq 'createNewPortfolio') {
+                
+        } elsif (($action eq 'overview') or ($action eq 'depositOrWithdrawCash')) {
+                        ## TODO: dynamically populate this info based on DB info
+                        $overviewTemplate->param(
+                                LOGGEDIN => $loggedin,
+                                USERNAME => $username,
+                                PORTFOLIO_NAMES => [ 
+                                                {         name => 'conservative',
+                                                        overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
+                                                {   name => 'myPortfolio',
+                                                        overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
+                                ],
+                                TRADING_STRATEGIES => [
+                                        { name => 'myStrat_A' },
+                                        { name => 'myStrat_B' }
+                                ],
+                                CUR_PORTFOLIO => $pfname,
+                                CASH_IN_ACCT => 40000,
+                                PORTFOLIO_VAL => 10000,
+                                PORTFOLIO_AVG_VOL => 0.5,
+                                PORTFOLIO_AVG_CORR => 0.8
+                        );
+                        if ($action eq 'overview') {
+                                # bake the updated cookie and render template
+                                bake_cookie();
+                                print $overviewTemplate->output;
+                        }
+                        elsif ($action eq 'depositOrWithdrawCash') {
+                                if (param('type') eq 'deposit') {
+                                        #continue;
+                                                ## TODO: UPDATE DB HERE
+                                } elsif (param('type') eq 'withdraw') {
+                                        #continue;
+                                                ## TODO: UPDATE DB HERE
+                                }
+                                bake_cookie();
+                                ## TODO: MAKE THIS DYNAMIC
+                                $overviewTemplate->param(CASH_IN_ACCT => 30000);
+                                print $overviewTemplate->output;
+                        }
+        }
 } else {
-		bake_cookie();
-		print $baseTemplate->output;
+                bake_cookie();
+                print $baseTemplate->output;
 }
 
 # The following is necessary so that DBD::Oracle can
@@ -174,16 +174,16 @@ BEGIN {
 
 # Not ideal: we have to manually make sure parameters are retrieved in the parse function in the same order that they were stored in bake...
 sub parse_cookie {
-	my %cookies = CGI::Cookie->fetch;
+        my %cookies = CGI::Cookie->fetch;
     my $cookie = $cookies{'NUPortfolioCookie'};
     if ($cookie) {
-		$loggedin = $cookie->value;
-	}
+                $loggedin = $cookie->value;
+        }
 }
 
 sub bake_cookie {
-	$cookie = CGI::Cookie->new(-name=>'NUPortfolioCookie',-value=>"$loggedin");
-	$cookie->bake;
+        $cookie = CGI::Cookie->new(-name=>'NUPortfolioCookie',-value=>"$loggedin");
+        $cookie->bake;
 }
 
 #
