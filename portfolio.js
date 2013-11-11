@@ -7,6 +7,11 @@ $(document).ready(function() {
 		$('#logoutForm').submit();
 	});
 	
+	$('#toRegisterBtn').click(function(event) {
+		event.preventDefault();
+		$('#toRegisterForm').submit();
+	});
+	
 	$('#depositBtn').click(function() {
 		var input = $("<input>").attr("type", "hidden").attr("name", "type").val("deposit");
 		$('#cashAcctMovements').append($(input));

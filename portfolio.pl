@@ -14,7 +14,7 @@ my @sqlinput = ();
 my @sqloutput = ();
 
 # state variables
-my $loggedin = 1;
+my $loggedin = 0;
 my $pfname = param('pfname');
 my $username = 'Moritz';
 
@@ -23,6 +23,7 @@ my $username = 'Moritz';
 my $toolbarTemplate = HTML::Template->new(filename => 'toolbar.tmpl');
 my $baseTemplate = HTML::Template->new(filename => 'home.tmpl');
 my $overviewTemplate = HTML::Template->new(filename => 'overview.tmpl');
+my $registerTemplate = HTML::Template->new(filename => 'register.tmpl');
 
 #
 # Get the user action and whether he just wants the form or wants us to
@@ -67,6 +68,7 @@ if ($action eq 'login') {
 		$loggedin = 1;
 		# bake the updated cookie and render template
 		bake_cookie();
+		$baseTemplate->param(LOGGEDIN => $loggedin);
 		print $baseTemplate->output;
 } elsif ($action eq 'logout') {
 		$loggedin = 0;
@@ -79,7 +81,28 @@ if ($action eq 'login') {
 		# bake the updated cookie and render template
 		bake_cookie();
 		print $baseTemplate->output;
-} 
+} elsif ($action eq 'register') {
+	$registerTemplate->param(
+		LOGGEDIN => 0,
+		USERNAME => $username,
+		PORTFOLIO_NAMES => [ 
+			{ 	name => 'conservative',
+			overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
+			{ 	name => 'myPortfolio',
+			overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
+		],
+		TRADING_STRATEGIES => [
+			{ name => 'myStrat_A' },
+			{ name => 'myStrat_B' }
+		]
+	);
+	bake_cookie();
+	if ($run == 0) {
+		print $registerTemplate->output;
+	} else {
+		print $registerTemplate->output;
+	}
+}
 
 # all of these actions should only be processed if the user is logged in
 elsif ($loggedin == 1) {
@@ -109,20 +132,21 @@ elsif ($loggedin == 1) {
 				print $overviewTemplate->output;
 			}
 			elsif ($action eq 'depositOrWithdrawCash') {
-				#if (param('type') eq 'deposit') {
-				#	continue;
-				#		## TODO: UPDATE DB HERE
-				#} elsif (param('type') eq 'withdraw') {
-				#	continue;
+				if (param('type') eq 'deposit') {
+					#continue;
 						## TODO: UPDATE DB HERE
-				#}
-				## TODO: MAKE THIS DYNAMIC
+				} elsif (param('type') eq 'withdraw') {
+					#continue;
+						## TODO: UPDATE DB HERE
+				}
 				bake_cookie();
+				## TODO: MAKE THIS DYNAMIC
 				$overviewTemplate->param(CASH_IN_ACCT => 30000);
 				print $overviewTemplate->output;
 			}
 	}
 } else {
+		bake_cookie();
 		print $baseTemplate->output;
 }
 
@@ -150,13 +174,12 @@ sub parse_cookie {
 	my %cookies = CGI::Cookie->fetch;
     my $cookie = $cookies{'NUPortfolioCookie'};
     if ($cookie) {
-		my @kvpairs = split('/&/',$cookie->value);
-		$loggedin = ${kvpairs[0]};
+		$loggedin = $cookie->value;
 	}
 }
 
 sub bake_cookie {
-	$cookie = CGI::Cookie->new(-name=>'NUPortfolioCookie',-value=>"$loggedin&");
+	$cookie = CGI::Cookie->new(-name=>'NUPortfolioCookie',-value=>"$loggedin");
 	$cookie->bake;
 }
 
