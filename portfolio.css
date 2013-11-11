@@ -30,3 +30,8 @@ body {
 #moneyInAcct {
     padding-left:20px;
 }
+
+#moneyInAcct h6 {
+	float:right;
+	padding-right:50px;
+}
