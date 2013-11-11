@@ -32,7 +32,11 @@
        </div>
        <div class="row">
 	 <div class='panel panel-default' id='overviewStatsPanel'>
-			<a href='portfolio.pl?act=viewStockList&'>View List of Stocks</a>
+		 <form id='viewStockListForm' action='portfolio.pl'>
+			 <input type='hidden' name='act' value='viewStockList' />
+			<input type='hidden' name='pfname' value=<TMPL_VAR NAME='CUR_PORTFOLIO'> />
+			<button id='viewListOfStockBtn'>View List of Stocks</button>
+		 </form>
 			<div class='row'>
 			<div class="col-md-6">
 				<h5>Graph of Portfolio Value over time:</h5>
