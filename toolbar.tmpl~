@@ -1,0 +1,45 @@
+        <div id='nav bar'>
+                <div id='login-container' class='navbar navbar-inverse navbar-fixed-top'>
+                        <div class='navbar-header'>
+                                        <a class='navbar-brand' href="portfolio.pl?">Portfolio Manager</a>
+                        </div>
+                        <div class="navbar-collapse collapse">
+                                <TMPL_UNLESS NAME='LOGGEDIN'>
+                                        <form id='loginForm' name='loginForm' action='portfolio.pl' class='navbar-form navbar-right'>
+                                                <div class="form-group">
+                                                        <input type='text' name='user' placeholder='Username' class='form-control' />
+                                                </div>
+                                                <div class="form-group">
+                                                        <input type='password' name='pwd' placeholder='Password' class='form-control' />
+                                                </div>
+                                                <input type='hidden' name='act' value='login' />
+                                                <button id='loginBtn' class='btn btn-success'>Log In</button>
+                                                <button id='registerBtn' class='btn'>Register</a>
+                                        </form>
+                                <TMPL_ELSE>
+                                        <ul class="nav navbar-nav">
+                                                <li class="dropdown">
+                                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Portfolios<b class="caret"></b></a>
+                                                        <ul class="dropdown-menu">
+                                                                <li><a href="portfolio.pl?act=createNewPortfolio">Create New...</a></li>
+                                                                <li class="divider"></li>
+                                                                <TMPL_LOOP NAME=PORTFOLIO_NAMES>
+                                                                        <li><a href=<TMPL_VAR NAME=OVERVIEWLINK> ><TMPL_VAR NAME=NAME></a></li>
+                                                                </TMPL_LOOP>
+                                                        </ul>
+                                                </li>
+                                                <li class="dropdown">
+                                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Trading Strategies<b class="caret"></b></a>
+                                                        <ul class="dropdown-menu">
+                                                                <li class="divider"></li>
+                                                                <TMPL_LOOP NAME=TRADING_STRATEGIES>
+                                                                        <li><TMPL_VAR NAME=NAME></li>
+                                                                </TMPL_LOOP>
+                                        </ul>
+                                        <div class='navbar-right'>
+                                                <p class="navbar-text">Signed in as <TMPL_VAR NAME=USERNAME>. <a href="#" class="navbar-link" id='logoutBtn'>Log out</a></p>
+                                        </div>
+                                </TMPL_UNLESS>
+                        </div>
+                </div>
+        </div>
