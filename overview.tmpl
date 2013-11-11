@@ -8,38 +8,32 @@
     <script type="text/javascript" src="portfolio.js"></script>
   </head>
   <body>
-    <div id='main-content'>
-      <div id='login-container' class='navbar navbar-inverse navbar-fixed-top'>
-	<div class='navbar-header'>
-	  <a class='navbar-brand'>Portfolio Manager</a>
-	</div>
-	<div class="navbar-collapse collapse">
-	   <ul class="nav navbar-nav">
-	     <li class="dropdown">
-	       <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Portfolios<b class="caret"></b></a>
-	       <ul class="dropdown-menu">
-		 <li><a href="portfolio.pl?act=createNewPortfolio">Create New...</a></li>
-		 <li class="divider"></li>
-		 <TMPL_LOOP NAME=PORTFOLIO_NAMES>
-		   <li><a href=<TMPL_VAR NAME=OVERVIEWLINK> ><TMPL_VAR NAME=NAME></a></li>
-		 </TMPL_LOOP>
-	       </ul>
-	     </li>
-	   </ul>
-	   <div class='navbar-right'>
-	     <p class="navbar-text">Signed in as <TMPL_VAR NAME=USERNAME>. <a href="#" class="navbar-link" id='logoutBtn'>Log out</a></p>
-	   </div>
-       </div>
-     </div>
-
+    <TMPL_INCLUDE NAME='toolbar.tmpl'>
      <div>
-       <h1> Portfolio Management and Performance </h1>
-       <h3> Total Cash in Acct.: 40k$ </h3>
-       <form action='portfolio.pl' name='cashAcctMovements'>
-	 <button class='btn' id='depositBtn'>Deposit</button>
-	 <button class='btn' id='withdrawBtn'>Withdraw</button>
-	 <input type='text'>Amt. ($)</input>
+       <h1> <i><TMPL_VAR NAME='CUR_PORTFOLIO'></i>: Management and Performance </h1>
+       <div class="row">
+	 <form action='portfolio.pl' name='cashAcctMovements' id='cashAcctMovements'>
+	 <div class="input-group col-md-4" id="manageCashAcctDiv">
+	   <div class="input-group-btn">
+		<button class='btn btn-default' id='depositBtn'>Deposit</button>
+		<button class='btn btn-default' id='withdrawBtn'>Withdraw</button>
+	   </div>
+	   <input type="text" class="form-control" />
+	   <span class="input-group-addon">$</span>
+	 </div>
+	 <div id="moneyInAcct" class="col-md-4">
+	    <h6>Total Cash in Acct.: <TMPL_VAR NAME='CASH_IN_ACCT'>$</h6>
+	 </div>
+	 <div class='col-md-4'></div>
+		<input type='hidden' name='act' value='depositOrWithdrawCash' />
+		<input type='hidden' name='pfname' value=<TMPL_VAR NAME='CUR_PORTFOLIO'> />
        </form>
+       </div>
+       <div class="row">
+	 <div class='panel panel-default' id='overviewStatsPanel'>
+	   <p>Content here</p>
+	 </div>
+       </div>
      </div>
      <!-- bogus form for logout action -->
      <form id='logoutForm' action='portfolio.pl'><input type='hidden' name='act' value='logout' /></form>

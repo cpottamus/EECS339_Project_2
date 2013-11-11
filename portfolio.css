@@ -16,3 +16,17 @@ div {
 body {
 	padding-top:70px;
 }
+
+#manageCashAcctDiv {
+    padding-left:20px;
+    width:50%;
+}
+
+#overviewStatsPanel {
+    margin:20px;
+    padding:8px;
+}
+
+#moneyInAcct {
+    padding-left:20px;
+}

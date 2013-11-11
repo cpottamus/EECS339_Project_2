@@ -15,10 +15,12 @@ my @sqloutput = ();
 
 # state variables
 my $loggedin = 1;
+my $pfname = param('pfname');
 my $username = 'Moritz';
 
 
 # open the HTML Template
+my $toolbarTemplate = HTML::Template->new(filename => 'toolbar.tmpl');
 my $baseTemplate = HTML::Template->new(filename => 'home.tmpl');
 my $overviewTemplate = HTML::Template->new(filename => 'overview.tmpl');
 
@@ -29,6 +31,7 @@ my $overviewTemplate = HTML::Template->new(filename => 'overview.tmpl');
 my $action;
 my $run;
 my $cookie = undef;
+my $pfnameCookie = undef;
 parse_cookie();
 
 if (defined(param("act"))) { 
@@ -48,11 +51,15 @@ $baseTemplate->param(
 	LOGGEDIN => $loggedin,
 	USERNAME => $username,
 	PORTFOLIO_NAMES => [ 
-                           { 	name => 'conservative',
-								overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
-					       { 	name => 'myPortfolio',
-								overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
-                       ]
+	    { 	name => 'conservative',
+		overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
+	    { 	name => 'myPortfolio',
+		overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
+    ],
+    TRADING_STRATEGIES => [
+		{ name => 'myStrat_A' },
+		{ name => 'myStrat_B' }
+    ]
 );
 
 # Handle actions
@@ -72,26 +79,48 @@ if ($action eq 'login') {
 		# bake the updated cookie and render template
 		bake_cookie();
 		print $baseTemplate->output;
-}
+} 
+
 # all of these actions should only be processed if the user is logged in
 elsif ($loggedin == 1) {
 	if ($action eq 'createNewPortfolio') {
 		
-	} elsif ($action eq 'overview') {
+	} elsif (($action eq 'overview') or ($action eq 'depositOrWithdrawCash')) {
 			## TODO: dynamically populate this info based on DB info
 			$overviewTemplate->param(
+				LOGGEDIN => $loggedin,
 				USERNAME => $username,
 				PORTFOLIO_NAMES => [ 
-                           { 	name => 'conservative',
-								overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
-					       { 	name => 'myPortfolio',
-								overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
-                       ]
+						{ 	name => 'conservative',
+							overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
+						{   name => 'myPortfolio',
+							overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
+				],
+				TRADING_STRATEGIES => [
+					{ name => 'myStrat_A' },
+					{ name => 'myStrat_B' }
+				],
+				CUR_PORTFOLIO => $pfname,
+				CASH_IN_ACCT => 40000
 			);
-			
-			# bake the updated cookie and render template
-			bake_cookie();
-			print $overviewTemplate->output;
+			if ($action eq 'overview') {
+				# bake the updated cookie and render template
+				bake_cookie();
+				print $overviewTemplate->output;
+			}
+			elsif ($action eq 'depositOrWithdrawCash') {
+				#if (param('type') eq 'deposit') {
+				#	continue;
+				#		## TODO: UPDATE DB HERE
+				#} elsif (param('type') eq 'withdraw') {
+				#	continue;
+						## TODO: UPDATE DB HERE
+				#}
+				## TODO: MAKE THIS DYNAMIC
+				bake_cookie();
+				$overviewTemplate->param(CASH_IN_ACCT => 30000);
+				print $overviewTemplate->output;
+			}
 	}
 } else {
 		print $baseTemplate->output;
