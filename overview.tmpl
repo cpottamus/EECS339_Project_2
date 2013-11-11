@@ -22,18 +22,27 @@
 	   <span class="input-group-addon">$</span>
 	 </div>
 	 <div id="moneyInAcct" class="col-md-4">
-	    <h6>Total Cash in Acct.: <TMPL_VAR NAME='CASH_IN_ACCT'>$</h6>
+		 <h6>Current <b>Portfolio Value</b>: <TMPL_VAR NAME='PORTFOLIO_VAL'>$</h6>
+	    <h6>Money in <b>Cash</b> Acct.: <TMPL_VAR NAME='CASH_IN_ACCT'>$</h6>
 	 </div>
-	 <div class='col-md-4'></div>
 		<input type='hidden' name='act' value='depositOrWithdrawCash' />
 		<input type='hidden' name='pfname' value=<TMPL_VAR NAME='CUR_PORTFOLIO'> />
        </form>
        </div>
        <div class="row">
 	 <div class='panel panel-default' id='overviewStatsPanel'>
-	   <p>Content here</p>
+			<a href='#'>View List of Stocks</a>
+			<div class='row'>
+			<div class="col-md-6">
+				<h5>Graph of Portfolio Value over time:</h5>
+				<p>...insert graph here...</p>
+			</div>
+			<div class="col-md-2">
+				<p>Avg. volatility: <TMPL_VAR NAME='PORTFOLIO_AVG_VOL'></p>
+				<p>Avg. correlation: <TMPL_VAR NAME='PORTFOLIO_AVG_CORR'></p>
+			</div>
+			</div>
 	 </div>
-       </div>
      </div>
    </div>
    </body>

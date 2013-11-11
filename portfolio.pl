@@ -124,7 +124,10 @@ elsif ($loggedin == 1) {
 					{ name => 'myStrat_B' }
 				],
 				CUR_PORTFOLIO => $pfname,
-				CASH_IN_ACCT => 40000
+				CASH_IN_ACCT => 40000,
+				PORTFOLIO_VAL => 10000,
+				PORTFOLIO_AVG_VOL => 0.5,
+				PORTFOLIO_AVG_CORR => 0.8
 			);
 			if ($action eq 'overview') {
 				# bake the updated cookie and render template
