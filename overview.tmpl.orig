@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <title>Test</title>
+    <link rel="stylesheet" type="text/css" href="./portfolio.css" />
+    <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="portfolio.js"></script>
+  </head>
+  <body>
+<<<<<<< HEAD
+<TMPL_INCLUDE NAME='toolbar.tmpl'>
+
+=======
+    <TMPL_INCLUDE NAME='toolbar.tmpl'>
+>>>>>>> fdd0db4013f3dd7cb87084e479c52985dea569a3
+     <div>
+       <h1> <i><TMPL_VAR NAME='CUR_PORTFOLIO'></i>: Management and Performance </h1>
+       <div class="row">
+	 <form action='portfolio.pl' name='cashAcctMovements' id='cashAcctMovements'>
+	 <div class="input-group col-md-4" id="manageCashAcctDiv">
+	   <div class="input-group-btn">
+		<button class='btn btn-default' id='depositBtn'>Deposit</button>
+		<button class='btn btn-default' id='withdrawBtn'>Withdraw</button>
+	   </div>
+	   <input type="text" class="form-control" />
+	   <span class="input-group-addon">$</span>
+	 </div>
+	 <div id="moneyInAcct" class="col-md-4">
+	    <h6>Total Cash in Acct.: <TMPL_VAR NAME='CASH_IN_ACCT'>$</h6>
+	 </div>
+	 <div class='col-md-4'></div>
+		<input type='hidden' name='act' value='depositOrWithdrawCash' />
+		<input type='hidden' name='pfname' value=<TMPL_VAR NAME='CUR_PORTFOLIO'> />
+       </form>
+       </div>
+       <div class="row">
+	 <div class='panel panel-default' id='overviewStatsPanel'>
+	   <p>Content here</p>
+	 </div>
+       </div>
+     </div>
+   </div>
+   </body>
+</html>
