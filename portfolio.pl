@@ -24,6 +24,7 @@ my $toolbarTemplate = HTML::Template->new(filename => 'toolbar.tmpl');
 my $baseTemplate = HTML::Template->new(filename => 'home.tmpl');
 my $overviewTemplate = HTML::Template->new(filename => 'overview.tmpl');
 my $registerTemplate = HTML::Template->new(filename => 'register.tmpl');
+my $stocklistTemplate = HTML::Template->new(filename => 'stocklist.tmpl');
 
 #
 # Get the user action and whether he just wants the form or wants us to
@@ -62,6 +63,7 @@ $baseTemplate->param(
                 { name => 'myStrat_B' }
     ]
 );
+
 
 # Handle actions
 if ($action eq 'login') {
@@ -147,7 +149,25 @@ elsif ($loggedin == 1) {
                                 $overviewTemplate->param(CASH_IN_ACCT => 30000);
                                 print $overviewTemplate->output;
                         }
-        }
+        } elsif ($action eq 'viewStockList') {
+			$stocklistTemplate->param(
+                                LOGGEDIN => $loggedin,
+                                USERNAME => $username,
+                                PORTFOLIO_NAMES => [ 
+                                                {         name => 'conservative',
+                                                        overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
+                                                {   name => 'myPortfolio',
+                                                        overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
+                                ],
+                                TRADING_STRATEGIES => [
+                                        { name => 'myStrat_A' },
+                                        { name => 'myStrat_B' }
+                                ],
+                                CUR_PORTFOLIO => $pfname
+			);
+			bake_cookie();
+			print $stocklistTemplate->output;
+		}
 } else {
                 bake_cookie();
                 print $baseTemplate->output;

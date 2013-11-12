@@ -22,4 +22,8 @@ $(document).ready(function() {
 		$('#cashAcctMovements').append($(input));
 		$('#cashAcctMovements').submit();
 	});
+	
+	$('#viewListOfStocksBtn').click(function() {
+			$('#viewStockListForm').submit();
+	});
 });
