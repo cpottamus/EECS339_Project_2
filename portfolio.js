@@ -24,6 +24,11 @@ $(document).ready(function() {
 	});
 	
 	$('#viewListOfStocksBtn').click(function() {
-			$('#viewStockListForm').submit();
+		$('#viewStockListForm').submit();
+	});
+	
+	$('.headerRow').click(function() {
+		$(this).next().toggleClass('hide');
+		$(this).next().next().toggleClass('hide');
 	});
 });

@@ -1,0 +1,44 @@
+<html>
+<head>
+        <title>Test</title>
+        <link rel="stylesheet" type="text/css" href="./portfolio.css" />
+        <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+        <script type="text/javascript" src="portfolio.js"></script>
+</head>
+<body>
+<TMPL_INCLUDE NAME='toolbar.tmpl'>
+
+        <!-- Page content below this point -->
+
+        <div class="jumbotron">
+                <h1><TMPL_VAR NAME='CUR_PORTFOLIO'>'s Stock Statistics</h1>
+                <div class="container">
+                        <div class="row">
+                                <h4>Select a date interval for information</h4>
+                                <div class="col-md-3">
+                                        Start date: <input type='date' name='startDate'>
+                                </div>
+                                <div class="col-md-3">
+                                        End date: <input type='date' name='endDate'>
+                                </div>
+                        </div>
+                </div>
+                <div class="container">
+                        <div class="row">
+                        <h2> Total Beta Estimate for the portfolio within current date range: PERL VARIABLE HERE</h2>
+                                <div class="col-md-3">
+                                        <h3>Covariance/Correlation Matrix</h3>
+                                </div>
+                                <div class="col-md-3">
+                                        <h3>Stock coefficient of variation and Beta Estimate</h3>
+                                </div>
+                        </div>
+                </div>
+        </div>        
+        
+        <!-- bogus form for logout action -->
+        <form id='logoutForm' action='portfolio.pl'><input type='hidden' name='act' value='logout' /></form>
+</body>
+</html>

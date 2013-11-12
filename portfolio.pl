@@ -24,7 +24,10 @@ my $toolbarTemplate = HTML::Template->new(filename => 'toolbar.tmpl');
 my $baseTemplate = HTML::Template->new(filename => 'home.tmpl');
 my $overviewTemplate = HTML::Template->new(filename => 'overview.tmpl');
 my $registerTemplate = HTML::Template->new(filename => 'register.tmpl');
-my $stocklistTemplate = HTML::Template->new(filename => 'stocklist.tmpl');
+my $stocklistTemplate = HTML::Template->new(filename => 'stocklist.tmpl', global_vars => 1);
+my $tradingStrategyTemplate = HTML::Template->new(filename => 'tradingStrategy.tmpl');
+my $singleStockTemplate = HTML::Template->new(filename => 'singleStock.tmpl');
+my $stockStatTemplate = HTML::Template->new(filename => 'stat.tmpl');
 
 #
 # Get the user action and whether he just wants the form or wants us to
@@ -163,10 +166,23 @@ elsif ($loggedin == 1) {
                                         { name => 'myStrat_A' },
                                         { name => 'myStrat_B' }
                                 ],
-                                CUR_PORTFOLIO => $pfname
+                                CUR_PORTFOLIO => $pfname,
+                                STOCK_INFO => make_stock_hash(),
 			);
 			bake_cookie();
 			print $stocklistTemplate->output;
+		} elsif ($action eq 'tradingStrategy') {
+			## TODO
+		} elsif (($action eq 'stockStats') or ($action eq 'stockHistory')) {
+			$pfname = param('pfname');
+			my $symbolName = param('symbol');
+			if ($action eq 'stockStats') {
+				
+				$stockStatTemplate->output;
+			} else { # stockHistory
+				my $singleStockTemplate->output;
+			}
+			
 		}
 } else {
                 bake_cookie();
@@ -281,4 +297,12 @@ sub ExecSQL {
   if ($debug) {push @sqloutput, MakeTable("debug_sql_output","2D",undef,@ret);}
   $dbh->disconnect();
   return @ret;
+}
+
+sub make_stock_hash {
+	return [
+		{symbol => 'GOOG', timestamp => '1/1/72', openval => '1000', high => '1250', low => '750', closeval => '1300', volume => '800' },
+		{symbol => 'GOOG', timestamp => '1/1/72', openval => '1000', high => '1250', low => '750', closeval => '1300', volume => '800' },
+		{symbol => 'GOOG', timestamp => '1/1/72', openval => '1000', high => '1250', low => '750', closeval => '1300', volume => '800' },
+	];
 }

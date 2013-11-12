@@ -32,7 +32,7 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">My Trading Strategies<b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<TMPL_LOOP NAME=TRADING_STRATEGIES>
-								<li><a href='#'><TMPL_VAR NAME=NAME></a></li>
+								<li><span class="input-group-addon"><input type="checkbox">   <TMPL_VAR NAME=NAME></span></li>
 							</TMPL_LOOP>
 						</ul>
 					</li>
