@@ -1,0 +1,95 @@
+<html>
+<head>
+<<<<<<< HEAD
+	<title>Test</title>
+	<link rel="stylesheet" type="text/css" href="./portfolio.css" />
+	<link href="css/bootstrap.css" rel="stylesheet" media="screen">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="portfolio.js"></script>
+=======
+        <title>Test</title>
+        <link rel="stylesheet" type="text/css" href="./portfolio.css" />
+        <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+        <script type="text/javascript" src="portfolio.js"></script>
+>>>>>>> 24089105fdee43b318c1fe6cbccc8fcdbf8db62b
+</head>
+<body>
+<TMPL_INCLUDE NAME='toolbar.tmpl'>
+
+<<<<<<< HEAD
+	<!-- Page content below this point -->
+=======
+        <!-- Page content below this point -->
+>>>>>>> 24089105fdee43b318c1fe6cbccc8fcdbf8db62b
+     <div>
+       <h1> <b><TMPL_VAR NAME='CUR_SS'></b>: Performance </h1>
+  <!-- daily info -->
+       <div class="row">
+<<<<<<< HEAD
+	 <form action='portfolio.pl' name='dailyStockInfo' id='dailyStockInfo'>
+	   Timestamp: <input type="text" name="timestamp">
+	   Symbol: <input type="text" name="symbol">
+	   Opening Price: <input type="text" name="open">
+	   Closing Price: <input type="text" name="close">
+	   Daily High: <input type="text" name="high">
+	   Daily Low: <input type="text" name="low">
+	   Daily Trade Volume: <input type="text" name="volume">
+	   <input type='submit' value="Submit" />
+	   <input type='hidden' name='act' value='updateStockInformation' />
+	   <input type='hidden' name='pfname' value=<TMPL_VAR NAME='CUR_PORTFOLIO'> />
+       	</form>
+=======
+         <form action='portfolio.pl' name='dailyStockInfo' id='dailyStockInfo'>
+           Timestamp: <input type="text" name="timestamp">
+           Symbol: <input type="text" name="symbol">
+           Opening Price: <input type="text" name="open">
+           Closing Price: <input type="text" name="close">
+           Daily High: <input type="text" name="high">
+           Daily Low: <input type="text" name="low">
+           Daily Trade Volume: <input type="text" name="volume">
+           <input type='submit' value="Submit" />
+           <input type='hidden' name='act' value='updateStockInformation' />
+           <input type='hidden' name='pfname' value=<TMPL_VAR NAME='CUR_PORTFOLIO'> />
+               </form>
+>>>>>>> 24089105fdee43b318c1fe6cbccc8fcdbf8db62b
+       </div>
+       <div class="row">
+
+<!-- time interval selector -->
+<<<<<<< HEAD
+	<div class="row">
+		<div class="jumbotron col-md-2">
+			
+
+		</div>
+		<div class="jumbotron col-md-2">
+			<div class="container">Select a prediction range<input type='date' name='prediction'></div>
+		</div>
+	</div>
+=======
+        <div class="row">
+                <div class="jumbotron col-md-2"></div>
+                <div class="jumbotron col-md-2">
+                        Select a prediction range<input type='date' name='prediction'>
+                </div>
+        </div>
+>>>>>>> 24089105fdee43b318c1fe6cbccc8fcdbf8db62b
+ <!-- Stock graph of past performance -->
+
+
+ <!-- Stock graph of predicted future performance-->
+   </div>
+<<<<<<< HEAD
+	
+	<!-- bogus form for logout action -->
+	<form id='logoutForm' action='portfolio.pl'><input type='hidden' name='act' value='logout' /></form>
+=======
+        
+        <!-- bogus form for logout action -->
+        <form id='logoutForm' action='portfolio.pl'><input type='hidden' name='act' value='logout' /></form>
+>>>>>>> 24089105fdee43b318c1fe6cbccc8fcdbf8db62b
+</body>
+</html>
