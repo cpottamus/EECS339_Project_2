@@ -133,9 +133,9 @@ elsif ($loggedin == 1) {
 			bake_cookie();
 			print $stocklistTemplate->output;
 		} elsif ($action eq 'tradingStrategy') {
-			set_generic_params($tradingStrategy);
+			set_generic_params($tradingStrategyTemplate);
 			bake_cookie();
-			print $tradingStrategy->output;
+			print $tradingStrategyTemplate->output;
 		} elsif (($action eq 'stockStats') or ($action eq 'stockHistory')) {
 			$pfname = param('pfname');
 			my $symbolName = param('symbol');
