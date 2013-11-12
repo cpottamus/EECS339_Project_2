@@ -23,9 +23,9 @@ my $username = 'Moritz';
 my $toolbarTemplate = HTML::Template->new(filename => 'toolbar.tmpl');
 my $baseTemplate = HTML::Template->new(filename => 'home.tmpl');
 my $overviewTemplate = HTML::Template->new(filename => 'overview.tmpl');
-my $registerTemplate = HTML::Template->new(filename => 'register.tmpl');
+my $registerTemplate = HTML::Template->new(filename => 'register.tmpl', die_on_bad_params => 0);
 my $stocklistTemplate = HTML::Template->new(filename => 'stocklist.tmpl', global_vars => 1);
-my $tradingStrategyTemplate = HTML::Template->new(filename => 'tradingStrategy.tmpl');
+my $tradingStrategyTemplate = HTML::Template->new(filename => 'tradingStrategy.tmpl', die_on_bad_params => 0);
 my $singleStockTemplate = HTML::Template->new(filename => 'singleStock.tmpl');
 my $stockStatTemplate = HTML::Template->new(filename => 'stat.tmpl');
 
@@ -67,7 +67,6 @@ $baseTemplate->param(
     ]
 );
 
-
 # Handle actions
 if ($action eq 'login') {
                 $loggedin = 1;
@@ -87,20 +86,8 @@ if ($action eq 'login') {
                 bake_cookie();
                 print $baseTemplate->output;
 } elsif ($action eq 'register') {
-        $registerTemplate->param(
-                LOGGEDIN => 0,
-                USERNAME => $username,
-                PORTFOLIO_NAMES => [ 
-                        {         name => 'conservative',
-                        overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
-                        {         name => 'myPortfolio',
-                        overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
-                ],
-                TRADING_STRATEGIES => [
-                        { name => 'myStrat_A' },
-                        { name => 'myStrat_B' }
-                ]
-        );
+		set_generic_params($registerTemplate);
+        $registerTemplate->param(LOGGEDIN => 0);
         bake_cookie();
         if ($run == 0) {
                 print $registerTemplate->output;
@@ -115,20 +102,8 @@ elsif ($loggedin == 1) {
                 
         } elsif (($action eq 'overview') or ($action eq 'depositOrWithdrawCash')) {
                         ## TODO: dynamically populate this info based on DB info
+                        set_generic_params($overviewTemplate);
                         $overviewTemplate->param(
-                                LOGGEDIN => $loggedin,
-                                USERNAME => $username,
-                                PORTFOLIO_NAMES => [ 
-                                                {         name => 'conservative',
-                                                        overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
-                                                {   name => 'myPortfolio',
-                                                        overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
-                                ],
-                                TRADING_STRATEGIES => [
-                                        { name => 'myStrat_A' },
-                                        { name => 'myStrat_B' }
-                                ],
-                                CUR_PORTFOLIO => $pfname,
                                 CASH_IN_ACCT => 40000,
                                 PORTFOLIO_VAL => 10000,
                                 PORTFOLIO_AVG_VOL => 0.5,
@@ -153,34 +128,26 @@ elsif ($loggedin == 1) {
                                 print $overviewTemplate->output;
                         }
         } elsif ($action eq 'viewStockList') {
-			$stocklistTemplate->param(
-                                LOGGEDIN => $loggedin,
-                                USERNAME => $username,
-                                PORTFOLIO_NAMES => [ 
-                                                {         name => 'conservative',
-                                                        overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
-                                                {   name => 'myPortfolio',
-                                                        overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
-                                ],
-                                TRADING_STRATEGIES => [
-                                        { name => 'myStrat_A' },
-                                        { name => 'myStrat_B' }
-                                ],
-                                CUR_PORTFOLIO => $pfname,
-                                STOCK_INFO => make_stock_hash(),
-			);
+			set_generic_params($stocklistTemplate);
+			$stocklistTemplate->param(STOCK_INFO => make_stock_hash());
 			bake_cookie();
 			print $stocklistTemplate->output;
 		} elsif ($action eq 'tradingStrategy') {
-			## TODO
+			set_generic_params($tradingStrategy);
+			bake_cookie();
+			print $tradingStrategy->output;
 		} elsif (($action eq 'stockStats') or ($action eq 'stockHistory')) {
 			$pfname = param('pfname');
 			my $symbolName = param('symbol');
 			if ($action eq 'stockStats') {
-				
-				$stockStatTemplate->output;
+				set_generic_params($stockStatTemplate);
+				bake_cookie();
+				print $stockStatTemplate->output;
 			} else { # stockHistory
-				my $singleStockTemplate->output;
+				set_generic_params($singleStockTemplate);
+				$singleStockTemplate->param(cur_ss => $symbolName);
+				bake_cookie();
+				print $singleStockTemplate->output;
 			}
 			
 		}
@@ -305,4 +272,23 @@ sub make_stock_hash {
 		{symbol => 'GOOG', timestamp => '1/1/72', openval => '1000', high => '1250', low => '750', closeval => '1300', volume => '800' },
 		{symbol => 'GOOG', timestamp => '1/1/72', openval => '1000', high => '1250', low => '750', closeval => '1300', volume => '800' },
 	];
+}
+
+sub set_generic_params {
+	my ($template) = @_;
+	
+	$template->param(	LOGGEDIN => $loggedin,
+                        USERNAME => $username,
+						PORTFOLIO_NAMES => [ 
+							{       name => 'conservative',
+									overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
+							{		name => 'myPortfolio',
+									overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
+						],
+						TRADING_STRATEGIES => [
+							{		name => 'myStrat_A' },
+							{ 		name => 'myStrat_B' }
+						],
+						CUR_PORTFOLIO => $pfname,
+                     );
 }
