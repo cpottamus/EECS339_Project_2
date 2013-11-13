@@ -265,6 +265,10 @@ sub ExecSQL {
 }
 
 sub make_stock_hash {
+	my @stocklist = (); # TODO: Populate stocklist from sequel (list of rows)
+	foreach (@stocklist) {
+		my $symbol = ${$_}[0];
+	}
 	return [
 		{symbol => 'GOOG', timestamp => '1/1/72', openval => '1000', high => '1250', low => '750', closeval => '1300', volume => '800' },
 		{symbol => 'GOOG', timestamp => '1/1/72', openval => '1000', high => '1250', low => '750', closeval => '1300', volume => '800' },
