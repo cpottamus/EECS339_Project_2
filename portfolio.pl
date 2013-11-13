@@ -22,8 +22,6 @@ my $loggedin = 0;
 my $pfname = param('pfname');
 my $username = '';
 
-my @ALL_PORTFOLIOS = ();
-
 
 # open the HTML Template
 my $toolbarTemplate = HTML::Template->new(filename => 'toolbar.tmpl');
