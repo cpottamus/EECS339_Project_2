@@ -34,6 +34,7 @@ my $stocklistTemplate = HTML::Template->new(filename => 'stocklist.tmpl', global
 my $tradingStrategyTemplate = HTML::Template->new(filename => 'tradingStrategy.tmpl', die_on_bad_params => 0);
 my $singleStockTemplate = HTML::Template->new(filename => 'singleStock.tmpl');
 my $stockStatTemplate = HTML::Template->new(filename => 'stat.tmpl');
+my $createPortfolioTemplate = HTML::Template->new(filename => 'createportfolio.tmpl', die_on_bad_params => 0);
 
 #
 # Get the user action and whether he just wants the form or wants us to
@@ -81,6 +82,7 @@ if ($action eq 'login') {
                 print $baseTemplate->output;
 } elsif ($action eq 'base') {
                 # bake the updated cookie and render template
+                set_generic_params($baseTemplate);
                 bake_cookie();
                 print $baseTemplate->output;
 }elsif ($action eq 'register') {
@@ -113,7 +115,28 @@ if ($action eq 'login') {
 }# all of these actions should only be processed if the user is logged in
 elsif ($loggedin == 1) {
         if ($action eq 'createNewPortfolio') {
-                
+			set_generic_params($createPortfolioTemplate);
+			if ($run == 1) {
+				my $newPfName = param('newpfname');
+				
+				my @portfolioData = eval { ExecSQL($dbuser,$dbpasswd,"select * from portfolios where owner=? and name=?",undef,$username,$newPfName); };
+				
+				my $createsuccess = ($#portfolioData == -1); # can only create new portfolio if it doesn't exist already
+				
+				if ($createsuccess == 1) {
+					eval { ExecSQL($dbuser,$dbpasswd,"insert into portfolios (pid,name,owner) values (pid_count.nextval,?,?)",undef,$newPfName,$username); };
+				}
+				
+				$createPortfolioTemplate->param(success => $createsuccess,
+												run => 1);
+				
+				bake_cookie();
+				print $createPortfolioTemplate->output;
+			} else {
+				$createPortfolioTemplate->param(run => 0);
+                bake_cookie();
+                print $createPortfolioTemplate->output;
+			}
         } elsif (($action eq 'overview') or ($action eq 'depositOrWithdrawCash')) {
                         ## TODO: dynamically populate this info based on DB info
                         set_generic_params($overviewTemplate);
@@ -225,12 +248,12 @@ sub parse_cookie {
         my %cookies = CGI::Cookie->fetch;
     my $cookie = $cookies{'NUPortfolioCookie'};
     if ($cookie) {
-                $loggedin = $cookie->value;
+                ($loggedin,$username) = split(/\//,$cookie->value);
         }
 }
 
 sub bake_cookie {
-        $cookie = CGI::Cookie->new(-name=>'NUPortfolioCookie',-value=>"$loggedin");
+        $cookie = CGI::Cookie->new(-name=>'NUPortfolioCookie',-value=>"$loggedin/$username");
         $cookie->bake;
 }
 
