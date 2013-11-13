@@ -26,9 +26,10 @@ my $pid = $pfid[0];
 
 # open the HTML Template
 my $toolbarTemplate = HTML::Template->new(filename => 'toolbar.tmpl');
-my $baseTemplate = HTML::Template->new(filename => 'home.tmpl');
+my $baseTemplate = HTML::Template->new(filename => 'home.tmpl', die_on_bad_params => 0);
 my $overviewTemplate = HTML::Template->new(filename => 'overview.tmpl');
 my $registerTemplate = HTML::Template->new(filename => 'register.tmpl', die_on_bad_params => 0);
+my $registerConfirmTemplate = HTML::Template->new(filename => 'registerconfirm.tmpl', die_on_bad_params => 0);
 my $stocklistTemplate = HTML::Template->new(filename => 'stocklist.tmpl', global_vars => 1);
 my $tradingStrategyTemplate = HTML::Template->new(filename => 'tradingStrategy.tmpl', die_on_bad_params => 0);
 my $singleStockTemplate = HTML::Template->new(filename => 'singleStock.tmpl');
@@ -57,11 +58,20 @@ if (defined(param("act"))) {
 
 # Handle actions
 if ($action eq 'login') {
+        my @userdata = eval { ExecSQL($dbuser,$dbpasswd,"select * from users where username=? and password=?",undef,param('user'),param('pwd')); };
+                if ($#userdata != -1) {
                 $loggedin = 1;
+                $username = ${$userdata[0]}[0];
+
+                set_generic_params($baseTemplate);
                 # bake the updated cookie and render template
                 bake_cookie();
                 $baseTemplate->param(LOGGEDIN => $loggedin);
                 print $baseTemplate->output;
+                } else {
+                                bake_cookie();
+                                print "<html><body>Sorry. Those credentials were not recognized, please try again.</body></html>";
+                        }
 } elsif ($action eq 'logout') {
                 $loggedin = 0;
                 # bake the updated cookie and render template
@@ -73,15 +83,33 @@ if ($action eq 'login') {
                 # bake the updated cookie and render template
                 bake_cookie();
                 print $baseTemplate->output;
-} elsif ($action eq 'register') {
-		set_generic_params($registerTemplate);
-        $registerTemplate->param(LOGGEDIN => 0);
-        bake_cookie();
+}elsif ($action eq 'register') {
+                set_generic_params($registerTemplate);
+                $registerTemplate->param(LOGGEDIN => 0);
+                bake_cookie();
         if ($run == 0) {
-                print $registerTemplate->output;
+                        $registerTemplate->param(registered => 0);
+            print $registerTemplate->output;
         } else {
-                print $registerTemplate->output;
+                        user_invite(param('email'),param('username'),param('pwd'));
+                        $registerTemplate->param(registered => 1);
+            print $registerTemplate->output;
         }
+} elsif ($action eq 'register_confirm') {
+                set_generic_params($registerConfirmTemplate);
+                bake_cookie();
+                
+                my @users = eval { ExecSQL($dbuser,$dbpasswd,
+                        "select * from users where name=?",undef,param('user'));
+                };
+                if ($#users == -1) {
+                        eval { ExecSQL($dbuser,$dbpasswd,"insert into users (username,password) values (?,?)",undef,param('user'),param('pwd')); };
+                        $registerConfirmTemplate->param(success => 1);
+                } else {
+                        $registerConfirmTemplate->param(success => 0);
+                }
+                
+                print $registerConfirmTemplate->output;
 }# all of these actions should only be processed if the user is logged in
 elsif ($loggedin == 1) {
         if ($action eq 'createNewPortfolio') {
@@ -93,7 +121,7 @@ elsif ($loggedin == 1) {
                         #Get parameters for pageview
                         my @currentAmount = eval { ExecSQL($dbuser, $dbpasswd, "SELECT amount FROM cash_accts WHERE owner = ? AND portfolio = ?", "COL", $username, $pid);};
                         
-                        #TO DO::: logic to calculate portfolio value, average volatility, and correlation
+                        #TODO::: logic to calculate portfolio value, average volatility, and correlation
 
                         $overviewTemplate->param(
                                 CASH_IN_ACCT => $currentAmount[0],
@@ -127,22 +155,41 @@ elsif ($loggedin == 1) {
                         }
         } elsif ($action eq 'viewStockList') {
 			set_generic_params($stocklistTemplate);
+
+                  #Action items:
+
+                  #TODO: Param(type)'s for  adding a stock,
+                  #TODO: Param(type)'s for  buying a stock,
+                  #TODO: Param(type)'s for  selling a stock,
+
+                  #TODO: See make_stock_hash for list.
 			$stocklistTemplate->param(STOCK_INFO => make_stock_hash());
 			bake_cookie();
 			print $stocklistTemplate->output;
-		} elsif ($action eq 'tradingStrategy') {
+	  } elsif ($action eq 'tradingStrategy') {
 			set_generic_params($tradingStrategyTemplate);
 			bake_cookie();
 			print $tradingStrategyTemplate->output;
-		} elsif (($action eq 'stockStats') or ($action eq 'stockHistory')) {
+	  } elsif (($action eq 'stockStats') or ($action eq 'stockHistory')) {
 			$pfname = param('pfname');
 			my $symbolName = param('symbol');
 			if ($action eq 'stockStats') {
 				set_generic_params($stockStatTemplate);
-				bake_cookie();
+				
+                        #TODO: param(date)'s for selecting time interval
+                                      #-pass total calculated beta in params,
+                                      #-pass hash of each coefficient of variation & beta estimate for every stock.
+                                      #-pass matrix hash for matrix generation.
+
+
+                        bake_cookie();
 				print $stockStatTemplate->output;
 			} else { # stockHistory
 				set_generic_params($singleStockTemplate);
+
+                      #TODO: make a param hash makeStockHistory, this will contain all of the historical/current data for a stock, for use in JS graph creation.
+
+                      #TODO: call trading strategy and pass the stuff to param to generate predicted value chart 
 				$singleStockTemplate->param(cur_ss => $symbolName);
 				bake_cookie();
 				print $singleStockTemplate->output;
@@ -265,10 +312,9 @@ sub ExecSQL {
 }
 
 sub make_stock_hash {
-	my @stocklist = (); # TODO: Populate stocklist from sequel (list of rows)
-	foreach (@stocklist) {
-		my $symbol = ${$_}[0];
-	}
+
+      #TODO :: Generate stock hash in appropriate data form for query. Pass into param
+
 	return [
 		{symbol => 'GOOG', timestamp => '1/1/72', openval => '1000', high => '1250', low => '750', closeval => '1300', volume => '800' },
 		{symbol => 'GOOG', timestamp => '1/1/72', openval => '1000', high => '1250', low => '750', closeval => '1300', volume => '800' },
@@ -299,4 +345,33 @@ sub set_generic_params {
 						],
 						CUR_PORTFOLIO => $pfname,
                      );
+}
+
+sub user_invite {
+        
+        my ($email,$user,$pwd) = @_;
+        
+        #
+        #creating unique link
+        #
+        my $link = "http://murphy.wot.eecs.northwestern.edu/~mjg839/portfolio/portfolio.pl?act=register_confirm&run=1&user=$user&pwd=$pwd";
+        
+        # creating email text
+        my $subject = "New-Portfolio-Account";
+        my $content = "Click the link below to setup your account. \n\n\n $link";
+        
+        
+        #
+        # This is the magic.  It means "run mail -s ..." and let me 
+        # write to its input, which I will call MAIL:
+        #
+        open(MAIL,"| mail -s $subject $email") or die "Can't run mail\n";
+        #
+        # And here we write to it
+        #
+        print MAIL $content;
+        #
+        # And then close it, resulting in the email being sent
+        #
+        close(MAIL);                                
 }
