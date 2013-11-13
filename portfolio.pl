@@ -339,14 +339,23 @@ sub ExecSQL {
 }
 
 sub make_stock_hash {
+	# select all stocks that belong to portfolio
+	$pid = get_current_pid();
+	my @stockSymbols = eval { ExecSQL($dbuser,$dbpasswd,"select symbol from stocks where portfolio = ?",undef,$pid); };
+	# build hash from that list
+	my @hashList = ();
+	foreach (@stockSymbols) {
+		my $symbol = @{$_}[0];
+		my @stockInfo = eval { ExecSQL($dbuser,$dbpasswd,"SELECT timestamp,open,high,low,close,volume FROM (SELECT * FROM stocks_new WHERE symbol = ? UNION SELECT * FROM cs339.StocksDaily WHERE symbol = ?)",'ROW',$symbol,$symbol); };
+		
+		push(@hashList,{symbol => $symbol, timestamp => $stockInfo[0], openval => $stockInfo[1], high => $stockInfo[2], low => $stockInfo[3], closeval => $stockInfo[4], volume => $stockInfo[5] });
+	}
 
-      #TODO :: Generate stock hash in appropriate data form for query. Pass into param
-
-	return [
-		{symbol => 'GOOG', timestamp => '1/1/72', openval => '1000', high => '1250', low => '750', closeval => '1300', volume => '800' },
-		{symbol => 'GOOG', timestamp => '1/1/72', openval => '1000', high => '1250', low => '750', closeval => '1300', volume => '800' },
-		{symbol => 'GOOG', timestamp => '1/1/72', openval => '1000', high => '1250', low => '750', closeval => '1300', volume => '800' },
-	];
+    return \@hashList;
+	#my $symbol = $stockInfo[0];
+	#return [{symbol => $stockInfo[0], timestamp => '1/1/72', openval => '1000', high => '1250', low => '750', closeval => '1300', volume => '800' },
+	#		{symbol => "$pid", timestamp => '2', openval => '1000', high => '1250', low => '750', closeval => '1300', volume => '800' }
+	#];
 }
 
 sub set_generic_params {
