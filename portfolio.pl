@@ -20,6 +20,8 @@ my $username = 'Moritz';
 my @pfid = eval {ExecSQL($dbuser, $dbpasswd, "select pid from portfolios where pname=? and owner=?", "COL", $pfname, $username);};
 my $pid = $pfid[0];
 
+my @ALL_PORTFOLIOS = ();
+
 
 # open the HTML Template
 my $toolbarTemplate = HTML::Template->new(filename => 'toolbar.tmpl');
@@ -287,16 +289,22 @@ sub make_stock_hash {
 }
 
 sub set_generic_params {
+	
+	my @pfnames = eval { ExecSQL($dbuser,$dbpasswd,"select name from portfolios where owner = ?",'COL',$username); };	
+
+	my @pfdata = ();
+	
+	foreach (@pfnames) {
+		push(@pfdata,{	name => "$_",
+						overviewlink => "portfolio.pl?act=overview&pfname=$_"} );
+	}
+	
 	my ($template) = @_;
 	
 	$template->param(	LOGGEDIN => $loggedin,
                         USERNAME => $username,
-						PORTFOLIO_NAMES => [ 
-							{       name => 'conservative',
-									overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
-							{		name => 'myPortfolio',
-									overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
-						],
+
+						PORTFOLIO_NAMES => \@pfdata,
 						TRADING_STRATEGIES => [
 							{		name => 'Shannon Rachet' },
 							{ 		name => 'myStrat_B' }
