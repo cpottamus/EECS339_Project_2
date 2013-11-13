@@ -9,6 +9,7 @@
 	</head>
 	<body>
 	<TMPL_INCLUDE NAME='toolbar.tmpl'>
+	<TMPL_UNLESS NAME='REGISTERED'>
 	<div>
 		<form name='register' action='portfolio.pl' role='form'>
 			<div class="form-group">
@@ -28,5 +29,10 @@
 			<input type='hidden' name='run' value='1' />
 		</form>
 	</div>
+	<TMPL_ELSE>
+		<div>
+			Thanks for registering! Please check your email.
+		</div>
+	</TMPL_UNLESS>
 	</body>
 </html>

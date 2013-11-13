@@ -1,0 +1,12 @@
+         <form action='portfolio.pl' name='dailyStockInfo' id='dailyStockInfo'>
+           Timestamp: <input type="text" name="timestamp">
+           Symbol: <input type="text" name="symbol">
+           Opening Price: <input type="text" name="open">
+           Closing Price: <input type="text" name="close">
+           Daily High: <input type="text" name="high">
+           Daily Low: <input type="text" name="low">
+           Daily Trade Volume: <input type="text" name="volume">
+           <input type='submit' value="Submit" />
+           <input type='hidden' name='act' value='updateStockInformation' />
+           <input type='hidden' name='pfname' value=<TMPL_VAR NAME='CUR_PORTFOLIO'> />
+         </form>

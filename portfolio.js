@@ -29,6 +29,5 @@ $(document).ready(function() {
 	
 	$('.headerRow').click(function() {
 		$(this).next().toggleClass('hide');
-		$(this).next().next().toggleClass('hide');
 	});
 });
