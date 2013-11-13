@@ -88,6 +88,8 @@ if ($action eq 'login') {
                 bake_cookie();
                 print $baseTemplate->output;
 } elsif ($action eq 'register') {
+
+          ##TODO :: check if username already exists
 		set_generic_params($registerTemplate);
         $registerTemplate->param(LOGGEDIN => 0);
         bake_cookie();
@@ -107,7 +109,7 @@ elsif ($loggedin == 1) {
                         #Get parameters for pageview
                         my @currentAmount = eval { ExecSQL($dbuser, $dbpasswd, "SELECT amount FROM cash_accts WHERE owner = ? AND portfolio = ?", "COL", $username, $pid);};
                         
-                        #TO DO::: logic to calculate portfolio value, average volatility, and correlation
+                        #TODO::: logic to calculate portfolio value, average volatility, and correlation
 
                         $overviewTemplate->param(
                                 CASH_IN_ACCT => $currentAmount[0],
