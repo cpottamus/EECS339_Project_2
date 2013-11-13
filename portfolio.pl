@@ -20,8 +20,8 @@ my $dbpasswd = 'zdu5GU1to';
 my $loggedin = 0;
 my $pfname = param('pfname');
 my $username = '';
-my @pfid = eval {ExecSQL($dbuser, $dbpasswd, "select pid from portfolios where pname=? and owner=?", "COL", $pfname, $username);};
-my $pid = $pfid[0];
+my @pfid = ();
+my $pid = undef;
 
 
 # open the HTML Template
@@ -118,6 +118,7 @@ elsif ($loggedin == 1) {
 			set_generic_params($createPortfolioTemplate);
 			if ($run == 1) {
 				my $newPfName = param('newpfname');
+				my $initialCashAmnt = param('initcash');
 				
 				my @portfolioData = eval { ExecSQL($dbuser,$dbpasswd,"select * from portfolios where owner=? and name=?",undef,$username,$newPfName); };
 				
@@ -125,6 +126,8 @@ elsif ($loggedin == 1) {
 				
 				if ($createsuccess == 1) {
 					eval { ExecSQL($dbuser,$dbpasswd,"insert into portfolios (pid,name,owner) values (pid_count.nextval,?,?)",undef,$newPfName,$username); };
+					
+					eval { ExecSQL($dbuser,$dbpasswd,"insert into cash_accts (amount,owner,portfolio) values (?,?,pid_count.nextval - 1)",undef,$initialCashAmnt,$username); };
 				}
 				
 				$createPortfolioTemplate->param(success => $createsuccess,
@@ -140,7 +143,7 @@ elsif ($loggedin == 1) {
         } elsif (($action eq 'overview') or ($action eq 'depositOrWithdrawCash')) {
                         ## TODO: dynamically populate this info based on DB info
                         set_generic_params($overviewTemplate);
-
+						$pid = get_current_pid();
                         #Get parameters for pageview
                         my @currentAmount = eval { ExecSQL($dbuser, $dbpasswd, "SELECT amount FROM cash_accts WHERE owner = ? AND portfolio = ?", "COL", $username, $pid);};
                         
@@ -397,4 +400,9 @@ sub user_invite {
         # And then close it, resulting in the email being sent
         #
         close(MAIL);                                
+}
+
+sub get_current_pid {
+	@pfid = eval {ExecSQL($dbuser, $dbpasswd, "select pid from portfolios where name=? and owner=?", "COL", $pfname, $username);};
+	return $pfid[0];	
 }
