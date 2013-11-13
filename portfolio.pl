@@ -13,10 +13,13 @@ my $debug = 0;
 my @sqlinput = ();
 my @sqloutput = ();
 
+my $dbuser = 'mjg839';
+my $dbpasswd = 'zdu5GU1to';
+
 # state variables
 my $loggedin = 0;
 my $pfname = param('pfname');
-my $username = 'Moritz';
+my $username = '';
 my @pfid = eval {ExecSQL($dbuser, $dbpasswd, "select pid from portfolios where pname=? and owner=?", "COL", $pfname, $username);};
 my $pid = $pfid[0];
 
@@ -38,7 +41,6 @@ my $stockStatTemplate = HTML::Template->new(filename => 'stat.tmpl');
 my $action;
 my $run;
 my $cookie = undef;
-my $pfnameCookie = undef;
 parse_cookie();
 
 if (defined(param("act"))) { 
@@ -52,22 +54,6 @@ if (defined(param("act"))) {
   $action="base";
   $run = 1;
 }
-
-# set template parameters
-$baseTemplate->param(
-        LOGGEDIN => $loggedin,
-        USERNAME => $username,
-        PORTFOLIO_NAMES => [ 
-            {         name => 'conservative',
-                overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
-            {         name => 'myPortfolio',
-                overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
-    ],
-    TRADING_STRATEGIES => [
-                { name => 'myStrat_A' },
-                { name => 'myStrat_B' }
-    ]
-);
 
 # Handle actions
 if ($action eq 'login') {
