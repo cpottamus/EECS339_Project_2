@@ -20,7 +20,7 @@ my $dbpasswd = 'zdu5GU1to';
 # state variables
 my $loggedin = 0;
 my $pfname = param('pfname');
-my $username = undef;
+my $username = '';
 
 my @ALL_PORTFOLIOS = ();
 
@@ -300,16 +300,18 @@ sub set_generic_params {
 	
 	my @pfnames = eval { ExecSQL($dbuser,$dbpasswd,"select name from portfolios where owner = ?",'COL',$username); };	
 
+	my @pfdata = ();
+	
+	foreach (@pfnames) {
+		push(@pfdata,{	name => "$_",
+						overviewlink => "portfolio.pl?act=overview&pfname=$_"} );
+	}
+	
 	my ($template) = @_;
 
 	$template->param(	LOGGEDIN => $loggedin,
                         USERNAME => $username,
-						PORTFOLIO_NAMES => [ 
-							{       name => $pfnames[0],
-									overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
-							{		name => 'myPortfolio',
-									overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
-						],
+						PORTFOLIO_NAMES => \@pfdata,
 						TRADING_STRATEGIES => [
 							{		name => 'myStrat_A' },
 							{ 		name => 'myStrat_B' }
