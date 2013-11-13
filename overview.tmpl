@@ -11,6 +11,11 @@
 
 <TMPL_INCLUDE NAME='toolbar.tmpl'>
      <div>
+		 <TMPL_IF NAME='TRANSACTION_INVALID'>
+			<div>
+				<p>Can't overdraw account. Your withdrawal was not processed.</p>
+			</div>
+		 </TMPL_IF>
        <h1> <i><TMPL_VAR NAME='CUR_PORTFOLIO'></i>: Management and Performance </h1>
        <div class="row">
 	 <form action='portfolio.pl' name='cashAcctMovements' id='cashAcctMovements'>

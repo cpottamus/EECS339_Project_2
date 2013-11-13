@@ -162,13 +162,14 @@ elsif ($loggedin == 1) {
                         }
                         elsif ($action eq 'depositOrWithdrawCash') {
                                 my $amount = param('bankAmount');
+                                $pid = get_current_pid();
                                 if (param('type') eq 'deposit') {
                                         #continue;
                                                 eval { ExecSQL($dbuser, $dbpasswd, "UPDATE cash_accts SET amount = amount + ? WHERE owner = ? AND portfolio = ?", undef, $amount, $username, $pid);};
                                 } elsif (param('type') eq 'withdraw') {
                                         #continue;
-                                                if($amount < $currentAmount[0]){
-                                                    print "<script> alert('This will overdraw your account, transaction not possible');</script>";
+                                                if($amount > $currentAmount[0]){
+                                                    $overviewTemplate->param(TRANSACTION_INVALID => 1);
                                                 }else{
                                                   eval { ExecSQL($dbuser, $dbpasswd, "UPDATE cash_accts SET amount = amount - ? WHERE owner = ? AND portfolio = ?", undef, $amount, $username, $pid);};
                                                 }
