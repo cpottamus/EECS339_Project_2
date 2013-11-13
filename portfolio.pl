@@ -286,7 +286,7 @@ sub set_generic_params {
 									overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
 						],
 						TRADING_STRATEGIES => [
-							{		name => 'myStrat_A' },
+							{		name => 'Shannon Rachet' },
 							{ 		name => 'myStrat_B' }
 						],
 						CUR_PORTFOLIO => $pfname,
