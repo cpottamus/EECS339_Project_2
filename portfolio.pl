@@ -13,24 +13,19 @@ my $debug = 0;
 my @sqlinput = ();
 my @sqloutput = ();
 
-# login credentials for DB
-my $dbuser = 'mjg839';
-my $dbpasswd = 'zdu5GU1to';
-
 # state variables
 my $loggedin = 0;
 my $pfname = param('pfname');
-my $username = undef;
-
-my @ALL_PORTFOLIOS = ();
+my $username = 'Moritz';
+my @pfid = eval {ExecSQL($dbuser, $dbpasswd, "select pid from portfolios where pname=? and owner=?", "COL", $pfname, $username);};
+my $pid = $pfid[0];
 
 
 # open the HTML Template
 my $toolbarTemplate = HTML::Template->new(filename => 'toolbar.tmpl');
-my $baseTemplate = HTML::Template->new(filename => 'home.tmpl',die_on_bad_params => 0);
+my $baseTemplate = HTML::Template->new(filename => 'home.tmpl');
 my $overviewTemplate = HTML::Template->new(filename => 'overview.tmpl');
 my $registerTemplate = HTML::Template->new(filename => 'register.tmpl', die_on_bad_params => 0);
-my $registerConfirmTemplate = HTML::Template->new(filename => 'registerconfirm.tmpl', die_on_bad_params => 0);
 my $stocklistTemplate = HTML::Template->new(filename => 'stocklist.tmpl', global_vars => 1);
 my $tradingStrategyTemplate = HTML::Template->new(filename => 'tradingStrategy.tmpl', die_on_bad_params => 0);
 my $singleStockTemplate = HTML::Template->new(filename => 'singleStock.tmpl');
@@ -43,7 +38,7 @@ my $stockStatTemplate = HTML::Template->new(filename => 'stat.tmpl');
 my $action;
 my $run;
 my $cookie = undef;
-my $usernamecookie = undef;
+my $pfnameCookie = undef;
 parse_cookie();
 
 if (defined(param("act"))) { 
@@ -59,24 +54,28 @@ if (defined(param("act"))) {
 }
 
 # set template parameters
-set_generic_params($baseTemplate);
+$baseTemplate->param(
+        LOGGEDIN => $loggedin,
+        USERNAME => $username,
+        PORTFOLIO_NAMES => [ 
+            {         name => 'conservative',
+                overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
+            {         name => 'myPortfolio',
+                overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
+    ],
+    TRADING_STRATEGIES => [
+                { name => 'myStrat_A' },
+                { name => 'myStrat_B' }
+    ]
+);
 
 # Handle actions
 if ($action eq 'login') {
-	my @userdata = eval { ExecSQL($dbuser,$dbpasswd,"select * from users where username=? and password=?",undef,param('user'),param('pwd')); };
-		if ($#userdata != -1) {
                 $loggedin = 1;
-                $username = ${$userdata[0]}[0];
-
-                set_generic_params($baseTemplate);
                 # bake the updated cookie and render template
                 bake_cookie();
                 $baseTemplate->param(LOGGEDIN => $loggedin);
                 print $baseTemplate->output;
-			} else {
-				bake_cookie();
-				print "<html><body>Sorry. Those credentials were not recognized, please try again.</body></html>";
-			}
 } elsif ($action eq 'logout') {
                 $loggedin = 0;
                 # bake the updated cookie and render template
@@ -90,42 +89,28 @@ if ($action eq 'login') {
                 print $baseTemplate->output;
 } elsif ($action eq 'register') {
 		set_generic_params($registerTemplate);
-		$registerTemplate->param(LOGGEDIN => 0);
-		bake_cookie();
+        $registerTemplate->param(LOGGEDIN => 0);
+        bake_cookie();
         if ($run == 0) {
-			$registerTemplate->param(registered => 0);
-            print $registerTemplate->output;
+                print $registerTemplate->output;
         } else {
-			user_invite(param('email'),param('username'),param('pwd'));
-			$registerTemplate->param(registered => 1);
-            print $registerTemplate->output;
+                print $registerTemplate->output;
         }
-} elsif ($action eq 'register_confirm') {
-		set_generic_params($registerConfirmTemplate);
-		bake_cookie();
-		
-		my @users = eval { ExecSQL($dbuser,$dbpasswd,
-			"select * from users where name=?",undef,param('user'));
-		};
-		if ($#users == -1) {
-			eval { ExecSQL($dbuser,$dbpasswd,"insert into users (username,password) values (?,?)",undef,param('user'),param('pwd')); };
-			$registerConfirmTemplate->param(success => 1);
-		} else {
-			$registerConfirmTemplate->param(success => 0);
-		}
-		
-		print $registerConfirmTemplate->output;
-}
-
-# all of these actions should only be processed if the user is logged in
+}# all of these actions should only be processed if the user is logged in
 elsif ($loggedin == 1) {
         if ($action eq 'createNewPortfolio') {
-               # TODO
+                
         } elsif (($action eq 'overview') or ($action eq 'depositOrWithdrawCash')) {
                         ## TODO: dynamically populate this info based on DB info
                         set_generic_params($overviewTemplate);
+
+                        #Get parameters for pageview
+                        my @currentAmount = eval { ExecSQL($dbuser, $dbpasswd, "SELECT amount FROM cash_accts WHERE owner = ? AND portfolio = ?", "COL", $username, $pid);};
+                        
+                        #TO DO::: logic to calculate portfolio value, average volatility, and correlation
+
                         $overviewTemplate->param(
-                                CASH_IN_ACCT => 40000,
+                                CASH_IN_ACCT => $currentAmount[0],
                                 PORTFOLIO_VAL => 10000,
                                 PORTFOLIO_AVG_VOL => 0.5,
                                 PORTFOLIO_AVG_CORR => 0.8
@@ -136,16 +121,22 @@ elsif ($loggedin == 1) {
                                 print $overviewTemplate->output;
                         }
                         elsif ($action eq 'depositOrWithdrawCash') {
+                                my $amount = param('bankAmount');
                                 if (param('type') eq 'deposit') {
                                         #continue;
-                                                ## TODO: UPDATE DB HERE
+                                                eval { ExecSQL($dbuser, $dbpasswd, "UPDATE cash_accts SET amount = amount + ? WHERE owner = ? AND portfolio = ?", undef, $amount, $username, $pid);};
                                 } elsif (param('type') eq 'withdraw') {
                                         #continue;
-                                                ## TODO: UPDATE DB HERE
-                                }
+                                                if($amount < $currentAmount[0]){
+                                                    print "<script> alert('This will overdraw your account, transaction not possible');</script>";
+                                                }else{
+                                                  eval { ExecSQL($dbuser, $dbpasswd, "UPDATE cash_accts SET amount = amount - ? WHERE owner = ? AND portfolio = ?", undef, $amount, $username, $pid);};
+                                                }
+                                }             
                                 bake_cookie();
-                                ## TODO: MAKE THIS DYNAMIC
-                                $overviewTemplate->param(CASH_IN_ACCT => 30000);
+                                
+                                my @cash = eval { ExecSQL($dbuser, $dbpasswd, "SELECT amount FROM cash_accts WHERE owner = ? AND portfolio = ?", "COL", $username, $pid);};
+                                $overviewTemplate->param(CASH_IN_ACCT => $cash[0]);
                                 print $overviewTemplate->output;
                         }
         } elsif ($action eq 'viewStockList') {
@@ -200,14 +191,13 @@ BEGIN {
 sub parse_cookie {
         my %cookies = CGI::Cookie->fetch;
     my $cookie = $cookies{'NUPortfolioCookie'};
-    my $usernamecookie = $cookies{'NUPortfolio-username'};
     if ($cookie) {
-                ($loggedin,$username) = split(/\//,$cookie->value);
+                $loggedin = $cookie->value;
         }
 }
 
 sub bake_cookie {
-        $cookie = CGI::Cookie->new(-name=>'NUPortfolioCookie',-value=>"$loggedin/$username");
+        $cookie = CGI::Cookie->new(-name=>'NUPortfolioCookie',-value=>"$loggedin");
         $cookie->bake;
 }
 
@@ -297,15 +287,12 @@ sub make_stock_hash {
 }
 
 sub set_generic_params {
-	
-	my @pfnames = eval { ExecSQL($dbuser,$dbpasswd,"select name from portfolios where owner = ?",'COL',$username); };	
-
 	my ($template) = @_;
-
+	
 	$template->param(	LOGGEDIN => $loggedin,
                         USERNAME => $username,
 						PORTFOLIO_NAMES => [ 
-							{       name => $pfnames[0],
+							{       name => 'conservative',
 									overviewlink => 'portfolio.pl?act=overview&pfname=conservative'},
 							{		name => 'myPortfolio',
 									overviewlink => 'portfolio.pl?act=overview&pfname=myPortfolio'},
@@ -316,33 +303,4 @@ sub set_generic_params {
 						],
 						CUR_PORTFOLIO => $pfname,
                      );
-}
-
-sub user_invite {
-	
-	my ($email,$user,$pwd) = @_;
-	
-	#
-	#creating unique link
-	#
-	my $link = "http://murphy.wot.eecs.northwestern.edu/~mjg839/portfolio/portfolio.pl?act=register_confirm&run=1&user=$user&pwd=$pwd";
-	
-	# creating email text
-	my $subject = "New-Portfolio-Account";
-	my $content = "Click the link below to setup your account. \n\n\n $link";
-	
-	
-	#
-	# This is the magic.  It means "run mail -s ..." and let me 
-	# write to its input, which I will call MAIL:
-	#
-	open(MAIL,"| mail -s $subject $email") or die "Can't run mail\n";
-	#
-	# And here we write to it
-	#
-	print MAIL $content;
-	#
-	# And then close it, resulting in the email being sent
-	#
-	close(MAIL);				
 }
