@@ -38,4 +38,5 @@ body {
 
 #matrixOfStocks {
 	font-family:courier;
+	white-space:pre;
 }

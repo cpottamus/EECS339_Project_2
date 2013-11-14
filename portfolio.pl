@@ -123,12 +123,12 @@ if ($action eq 'login') {
                 $registerTemplate->param(LOGGEDIN => 0);
                 bake_cookie();
         if ($run == 0) {
-                        $registerTemplate->param(registered => 0);
+			$registerTemplate->param(registered => 0);
             print $registerTemplate->output;
         } else {
-                        user_invite(param('email'),param('username'),param('pwd'));
-                        $registerTemplate->param(registered => 1);
-            print $registerTemplate->output;
+            user_invite(param('email'),param('username'),param('pwd'));
+            $registerTemplate->param(registered => 1);
+			print $registerTemplate->output;
         }
 } elsif ($action eq 'register_confirm') {
                 set_generic_params($registerConfirmTemplate);
@@ -302,7 +302,7 @@ elsif ($loggedin == 1) {
 			$pfname = param('pfname');
 			if ($action eq 'stockStats') {
 				set_generic_params($stockStatTemplate);
-				$stockStatTemplate->param(corr_matrix => get_matrix_string(['AAPL','IBM','G'],'1/1/99','12/31/00'));
+				$stockStatTemplate->param(corr_matrix => get_matrix_string(['AAPL','IBM','G','MSFT','GOOG','INTC'],'1/1/99','12/31/00'));
                         #TODO: param(date)'s for selecting time interval
                                       #-pass total calculated beta in params,
                                       #-pass hash of each coefficient of variation & beta estimate for every stock.
