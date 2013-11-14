@@ -22,9 +22,10 @@ CREATE SEQUENCE pid_count START WITH 1 INCREMENT BY 1 CACHE 100;
 -- Create Stocks table
 
 CREATE TABLE stocks (
-	symbol			varchar(5) NOT NULL PRIMARY KEY,
+	symbol			varchar(5) NOT NULL,
 	portfolio		number NOT NULL REFERENCES portfolios(pid) ON DELETE CASCADE,
-	quantity		number NOT NULL
+	quantity		number NOT NULL,
+	PRIMARY KEY(symbol,portfolio)
 );
 
 -- Create Cash Accounts table

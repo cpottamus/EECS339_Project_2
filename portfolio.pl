@@ -178,12 +178,13 @@ elsif ($loggedin == 1) {
 						$pid = get_current_pid();
                         #Get parameters for pageview
                         my @currentAmount = eval { ExecSQL($dbuser, $dbpasswd, "SELECT amount FROM cash_accts WHERE owner = ? AND portfolio = ?", "COL", $username, $pid);};
+                        my @portfolioVal = eval { ExecSQL($dbuser,$dbpasswd,"SELECT sum(d.close * s.amount) FROM (SELECT * FROM stocks_new WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?) UNION SELECT * FROM cs339.StocksDaily WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?)) d INNER JOIN stocks s ON d.symbol = s.symbol WHERE d.symbol NOT IN (SELECT symbol FROM (SELECT * FROM stocks_new WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?) UNION SELECT * FROM cs339.StocksDaily WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?)) sd WHERE d.timestamp < s.timestamp)",'COL',$pid,$pid,$pid,$pid); };
                         
                         #TODO::: logic to calculate portfolio value, average volatility, and correlation
 
                         $overviewTemplate->param(
                                 CASH_IN_ACCT => $currentAmount[0],
-                                PORTFOLIO_VAL => 10000,
+                                PORTFOLIO_VAL => $portfolioVal[0],
                                 PORTFOLIO_AVG_VOL => 0.5,
                                 PORTFOLIO_AVG_CORR => 0.8
                         );
@@ -230,7 +231,7 @@ elsif ($loggedin == 1) {
 									# check if stock already in portfolio (result of query must be > 0)
 									my @stockCountArr = eval { ExecSQL($dbuser,$dbpasswd,"SELECT count(*) FROM stocks WHERE symbol = ? AND portfolio = ?","COL",$symbol,$pid); };
 									my $stockCount = $stockCountArr[0];
-									if ($stockCount > 0) {
+									if ($#stockCountArr > 0 and $stockCount > 0) {
 										eval { ExecSQL($dbuser,$dbpasswd,"UPDATE stocks SET quantity = quantity + ? WHERE symbol = ? AND portfolio = ?",undef,$amount,$symbol,$pid); };
 									} else {
 										eval { ExecSQL($dbuser,$dbpasswd,"INSERT INTO stocks (symbol, portfolio, quantity) VALUES (?, ?, ?)",undef,$symbol,$pid,$amount); };
