@@ -59,7 +59,7 @@ my $pid = undef;
 # open the HTML Template
 my $toolbarTemplate = HTML::Template->new(filename => 'toolbar.tmpl');
 my $baseTemplate = HTML::Template->new(filename => 'home.tmpl', die_on_bad_params => 0);
-my $overviewTemplate = HTML::Template->new(filename => 'overview.tmpl');
+my $overviewTemplate = HTML::Template->new(filename => 'overview.tmpl',die_on_bad_params => 0);
 my $registerTemplate = HTML::Template->new(filename => 'register.tmpl', die_on_bad_params => 0);
 my $registerConfirmTemplate = HTML::Template->new(filename => 'registerconfirm.tmpl', die_on_bad_params => 0);
 my $stocklistTemplate = HTML::Template->new(filename => 'stocklist.tmpl', global_vars => 1, die_on_bad_params => 0);
@@ -198,8 +198,7 @@ elsif ($loggedin == 1) {
                                 CASH_IN_ACCT => $currentAmount[0],
                                 PORTFOLIO_VAL => $portfolioVal[0],
                                 PORTFOLIO_AVG_VOL => 0.5,
-                                PORTFOLIO_AVG_CORR => 0.8
-
+                                PORTFOLIO_AVG_CORR => 0.8,
                                 CASH_ACCOUNTS => \@cadata,
                         );
   
