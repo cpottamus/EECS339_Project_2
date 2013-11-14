@@ -16,13 +16,19 @@
                 <h1><TMPL_VAR NAME='CUR_PORTFOLIO'>'s Stock Statistics</h1>
                 <div class="container">
                         <div class="row">
+							<form action='portfolio.pl'>
                                 <h4>Select a date interval for information</h4>
                                 <div class="col-md-3">
-                                        Start date: <input type='date' name='startDate'>
+                                        Start date: <input type='date' name='startDate' />
                                 </div>
                                 <div class="col-md-3">
-                                        End date: <input type='date' name='endDate'>
+                                        End date: <input type='date' name='endDate' />
                                 </div>
+                                <input type='hidden' name='act' value='stockStats' />
+                                
+                                <input type='submit' value='Generate Matrix' />
+                                <input type='hidden' name='pfname' value="<TMPL_VAR NAME='CUR_PORTFOLIO'>" />
+                            </form>
                         </div>
                 </div>
                 <div class="container">
