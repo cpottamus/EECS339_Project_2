@@ -327,6 +327,8 @@ elsif ($loggedin == 1) {
 					);
 				}
 
+
+
 				#TODO: make a param hash makeStockHistory, this will contain all of the historical/current data for a stock, for use in JS graph creation.
 
 				#TODO: call trading strategy and pass the stuff to param to generate predicted value chart 
@@ -486,10 +488,10 @@ sub set_generic_params {
                         USERNAME => $username,
 
 						PORTFOLIO_NAMES => \@pfdata,
-						TRADING_STRATEGIES => [
-							{		name => 'Shannon Rachet' },
-							{ 		name => 'myStrat_B' }
-						],
+						# TRADING_STRATEGIES => [
+						# 	{		name => 'Shannon Rachet' },
+						# 	{ 		name => 'myStrat_B' }
+						# ],
 						CUR_PORTFOLIO => $pfname,
                      );
 }
