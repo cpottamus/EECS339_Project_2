@@ -141,7 +141,15 @@ elsif ($loggedin == 1) {
                 bake_cookie();
                 print $createPortfolioTemplate->output;
 			}
-        } elsif (($action eq 'overview') or ($action eq 'depositOrWithdrawCash')) {
+        } elsif ($action eq 'updateStockInformation') {
+			## TODO: input validation?
+			## TODO: if timestamp is entered in MM/DD/YYYY format, should we convert it?
+			
+			eval { ExecSQL($dbuser,$dbpasswd,"INSERT INTO stocks_new (symbol, timestamp, open, high, low, close, volume) VALUES (?, ?, ?, ?, ?, ?, ?)",undef,param('symbol'),param('timestamp'),param('open'),param('high'),param('low'),param('close'),param('volume')); };
+			my $redirectUrl = "portfolio.pl?act=viewStockList&pfname=$pfname";
+			print "Location: $redirectUrl\n\n";
+		}
+        elsif (($action eq 'overview') or ($action eq 'depositOrWithdrawCash')) {
                         ## TODO: dynamically populate this info based on DB info
                         set_generic_params($overviewTemplate);
 						$pid = get_current_pid();
@@ -413,7 +421,7 @@ sub make_stock_hash {
 	foreach (@stockSymbols) {
 		my $symbol = @{$_}[0];
 		my $quantity = @{$_}[1];
-		@stockInfo = eval { ExecSQL($dbuser,$dbpasswd,"SELECT timestamp,open,high,low,close,volume FROM (SELECT * FROM stocks_new WHERE symbol = ? UNION SELECT * FROM cs339.StocksDaily WHERE symbol = ?)",'ROW',$symbol,$symbol); };
+		@stockInfo = eval { ExecSQL($dbuser,$dbpasswd,"SELECT timestamp,open,high,low,close,volume FROM (SELECT * FROM stocks_new WHERE symbol = ? UNION SELECT * FROM cs339.StocksDaily WHERE symbol = ? ORDER BY 2 DESC) WHERE rownum <= 1",'ROW',$symbol,$symbol); };
 		
 		push(@hashList,{symbol => $symbol, timestamp => $stockInfo[0], openval => $stockInfo[1], high => $stockInfo[2], low => $stockInfo[3], closeval => $stockInfo[4], volume => $stockInfo[5], amnt_owned => $quantity });
 	}
