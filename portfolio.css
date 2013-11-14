@@ -35,3 +35,7 @@ body {
 	float:right;
 	padding-right:50px;
 }
+
+#matrixOfStocks {
+	font-family:courier;
+}

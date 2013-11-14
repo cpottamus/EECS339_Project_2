@@ -55,6 +55,7 @@ my $username = '';
 my @pfid = ();
 my $pid = undef;
 
+#print get_matrix_string(['AAPL','IBM','G'],'1/1/99','12/31/00');
 
 # open the HTML Template
 my $toolbarTemplate = HTML::Template->new(filename => 'toolbar.tmpl');
@@ -65,7 +66,7 @@ my $registerConfirmTemplate = HTML::Template->new(filename => 'registerconfirm.t
 my $stocklistTemplate = HTML::Template->new(filename => 'stocklist.tmpl', global_vars => 1, die_on_bad_params => 0);
 my $tradingStrategyTemplate = HTML::Template->new(filename => 'tradingStrategy.tmpl', die_on_bad_params => 0);
 my $singleStockTemplate = HTML::Template->new(filename => 'singleStock.tmpl', die_on_bad_params => 0);
-my $stockStatTemplate = HTML::Template->new(filename => 'stat.tmpl');
+my $stockStatTemplate = HTML::Template->new(filename => 'stat.tmpl', die_on_bad_params => 0);
 my $createPortfolioTemplate = HTML::Template->new(filename => 'createportfolio.tmpl', die_on_bad_params => 0);
 
 #
@@ -186,8 +187,8 @@ elsif ($loggedin == 1) {
 						$pid = get_current_pid();
                         #Get parameters for pageview
                         my @currentAmount = eval { ExecSQL($dbuser, $dbpasswd, "SELECT amount FROM cash_accts WHERE owner = ? AND portfolio = ?", "COL", $username, $pid);};
-                        my @portfolioVal = eval { ExecSQL($dbuser,$dbpasswd,"SELECT sum(d.close * s.amount) FROM (SELECT * FROM stocks_new WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?) UNION SELECT * FROM cs339.StocksDaily WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?)) d INNER JOIN stocks s ON d.symbol = s.symbol WHERE d.symbol NOT IN (SELECT symbol FROM (SELECT * FROM stocks_new WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?) UNION SELECT * FROM cs339.StocksDaily WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?)) sd WHERE d.timestamp < s.timestamp)",'COL',$pid,$pid,$pid,$pid); };
-                        
+                        my @portfolioVal = eval { ExecSQL($dbuser,$dbpasswd,"SELECT sum(d.close * s.quantity) FROM (SELECT * FROM stocks_new WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?) UNION SELECT * FROM cs339.StocksDaily WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?)) d INNER JOIN stocks s ON d.symbol = s.symbol WHERE s.portfolio = ? AND d.symbol NOT IN (SELECT symbol FROM (SELECT * FROM stocks_new WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?) UNION SELECT * FROM cs339.StocksDaily WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?)) sd WHERE d.timestamp < sd.timestamp)","COL",$pid,$pid,$pid,$pid,$pid); };
+                                                
                         #TODO::: logic to calculate portfolio value, average volatility, and correlation
 
                         $overviewTemplate->param(
@@ -301,7 +302,7 @@ elsif ($loggedin == 1) {
 			$pfname = param('pfname');
 			if ($action eq 'stockStats') {
 				set_generic_params($stockStatTemplate);
-				
+				$stockStatTemplate->param(corr_matrix => get_matrix_string(['AAPL','IBM','G'],'1/1/99','12/31/00'));
                         #TODO: param(date)'s for selecting time interval
                                       #-pass total calculated beta in params,
                                       #-pass hash of each coefficient of variation & beta estimate for every stock.
@@ -536,4 +537,20 @@ sub get_shannon_ratchet_data {
 	my $out = `$shellcmd`;
 	my ($lasttotal,$roi,$roi_annual,$lasttotalaftertradecost,$roi_at,$roi_at_annual) = split(/,/, $out);
 	return ($lasttotal,$roi,$roi_annual,$lasttotalaftertradecost,$roi_at,$roi_at_annual);
+}
+
+sub get_matrix_string {
+	my @listOfStocks = @{$_[0]};
+	my $from = $_[1];
+	my $to = $_[2];
+	
+	my $listOfStockString = "";
+	
+	foreach (@listOfStocks) {
+		$listOfStockString = $listOfStockString . " " . $_;
+	}
+	
+	my $shellcmd = "./get_covar.pl --field1=close --field2=close --from='$from' --to='$to' $listOfStockString";
+	my $str = `$shellcmd`;
+	return $str;
 }
