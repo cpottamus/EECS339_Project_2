@@ -181,14 +181,12 @@ elsif ($loggedin == 1) {
 			print "Location: $redirectUrl\n\n";
 		}
         elsif (($action eq 'overview') or ($action eq 'depositOrWithdrawCash')) {
-                        ## TODO: dynamically populate this info based on DB info
                         set_generic_params($overviewTemplate);
 						$pid = get_current_pid();
                         #Get parameters for pageview
                         my @currentAmount = eval { ExecSQL($dbuser, $dbpasswd, "SELECT amount FROM cash_accts WHERE owner = ? AND portfolio = ?", "COL", $username, $pid);};
                         my @portfolioVal = eval { ExecSQL($dbuser,$dbpasswd,"SELECT sum(d.close * s.quantity) FROM (SELECT * FROM stocks_new WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?) UNION SELECT * FROM cs339.StocksDaily WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?)) d INNER JOIN stocks s ON d.symbol = s.symbol WHERE s.portfolio = ? AND d.symbol NOT IN (SELECT symbol FROM (SELECT * FROM stocks_new WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?) UNION SELECT * FROM cs339.StocksDaily WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?)) sd WHERE d.timestamp < sd.timestamp)","COL",$pid,$pid,$pid,$pid,$pid); };
                                                 
-                        #TODO::: logic to calculate portfolio value, average volatility, and correlation
                         my @canames = eval { ExecSQL($dbuser,$dbpasswd,"select name from portfolios where owner = ?",'COL',$username); }; 
                         my @cadata = ();
                         foreach (@canames) {
@@ -218,6 +216,8 @@ elsif ($loggedin == 1) {
                                         #continue;
                                                 eval { ExecSQL($dbuser, $dbpasswd, "UPDATE cash_accts SET amount = amount + ? WHERE owner = ? AND portfolio = ?", undef, $amount, $username, $pid);};
                                                 if(param('cow') ne 'The Bank'){
+
+                                                  #TODO :: Constraint validation (can't take too much money from the other account)
                                                   my $cowgoesmoo = eval {ExecSQL($dbuser, $dbpasswd, "select pid from portfolios where name=? and owner=?", "COL", param('cow', $username);};
                                                   eval { ExecSQL($dbuser, $dbpasswd, "UPDATE cash_accts SET amount = amount - ? WHERE owner = ? AND portfolio = ?", undef, $amount, $username, $cowgoesmoo);};
                                                 }

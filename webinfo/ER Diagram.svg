@@ -146,6 +146,14 @@
         <text id="Symbol" fill="#000000" sketch:type="MSTextLayer" font-family="Helvetica" font-size="21" font-weight="normal" text-decoration="underline">
             <tspan x="695" y="800">Symbol</tspan>
         </text>
+        <ellipse d="M440,711 C473.137087,711 500,698.240116 500,682.5 C500,666.759884 473.137087,654 440,654 C406.862913,654 380,666.759884 380,682.5 C380,698.240116 406.862913,711 440,711 Z M440,711" id="Oval-1" stroke="#979797" stroke-width="3" sketch:type="MSShapeGroup" cx="440" cy="682.5" rx="60" ry="28.5"></ellipse>
+        <text id="Symbol" fill="#000000" sketch:type="MSTextLayer" font-family="Helvetica" font-size="21" font-weight="normal" text-decoration="underline">
+            <tspan x="405" y="690">Symbol</tspan>
+        </text>
+        <ellipse d="M1030,711 C1063.13709,711 1090,698.240116 1090,682.5 C1090,666.759884 1063.13709,654 1030,654 C996.862913,654 970,666.759884 970,682.5 C970,698.240116 996.862913,711 1030,711 Z M1030,711" id="Oval-1" stroke="#979797" stroke-width="3" sketch:type="MSShapeGroup" cx="1030" cy="682.5" rx="60" ry="28.5"></ellipse>
+        <text id="Symbol" fill="#000000" sketch:type="MSTextLayer" font-family="Helvetica" font-size="21" font-weight="normal" text-decoration="underline">
+            <tspan x="995" y="690">Symbol</tspan>
+        </text>
         <path d="M730.5,417.5 L730.5,446.5" id="Line" stroke="#979797" stroke-width="3" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
         <rect d="M453,800 L453,860 L645,860 L645,800 L453,800 Z M453,800" id="Rectangle-17" stroke="#979797" stroke-width="3" sketch:type="MSShapeGroup" x="453" y="800" width="192" height="60"></rect>
         <text id="Stocks-Daily-(old)" fill="#000000" sketch:type="MSTextLayer" font-family="Helvetica" font-size="21" font-weight="normal">
@@ -168,6 +176,7 @@
         <path d="M607.5,714.5 L632.5,714.5" id="Line" stroke="#979797" stroke-width="3" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
         <path id="Line-decoration-1" d="M632.5,714.5 C628.72,713.45 625.48,712.55 621.7,711.5 C621.7,713.6 621.7,715.4 621.7,717.5 C625.48,716.45 628.72,715.55 632.5,714.5 C632.5,714.5 632.5,714.5 632.5,714.5 Z M632.5,714.5" stroke="#979797" stroke-width="3" stroke-linecap="square"></path>
         <path d="M400.5,747.5 L453.5,800.5" id="Line" stroke="#979797" stroke-width="3" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
+        <path d="M453.5,710.5 L483.5,800.5" id="Line" stroke="#979797" stroke-width="3" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
         <path d="M405.5,806.5 L453.5,813.5" id="Line" stroke="#979797" stroke-width="3" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
         <path d="M405.5,873.5 L453.5,837.5" id="Line" stroke="#979797" stroke-width="3" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
         <path d="M398.5,929.5 L453.5,859.5" id="Line" stroke="#979797" stroke-width="3" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
@@ -178,6 +187,7 @@
         <path d="M1016.5,850.5 L1046.5,870.5" id="Line" stroke="#979797" stroke-width="3" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
         <path d="M1016.5,813.5 L1044.5,813.5" id="Line" stroke="#979797" stroke-width="3" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
         <path d="M1014.5,801.5 L1052.5,757.5" id="Line" stroke="#979797" stroke-width="3" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
+        <path d="M974.5,800.5 L1013.5,710.5" id="Line" stroke="#979797" stroke-width="3" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
         <path d="M826.5,914.5 L826.5,859.5" id="Line" stroke="#979797" stroke-width="3" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
     </g>
 </svg>
