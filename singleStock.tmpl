@@ -11,43 +11,48 @@
 <TMPL_INCLUDE NAME='toolbar.tmpl'>
 
         <!-- Page content below this point -->
-     <div>
-       <h1> <b><TMPL_VAR NAME='CUR_SS'></b>: Performance </h1>
-  <!-- daily info -->
-       <div class="row">
-			<TMPL_INCLUDE NAME='add_stock_widget.tmpl'>
+      <div class="row">
+                      <div class="container">
+                        <h1> <b><TMPL_VAR NAME='CUR_SS'></b>: Performance </h1>
+          <!-- daily info -->
+        			<TMPL_INCLUDE NAME='add_stock_widget.tmpl'>
+                  </div>
        </div>
+       
+
        <div class="row">
-
 <!-- time interval selector -->
-        <div class="row">
-                <div class="jumbotron col-md-2"></div>
-                <div class="jumbotron col-md-2">
-                        Select a prediction range<input type='date' name='prediction'>
+                <div class="row">
+                        <div class="jumbotron col-md-2">
+                          <!-- Stock graph of past performance -->
+                          
+                        </div>
+                        <div class="jumbotron col-md-2">
+                                Select a prediction range<input type='date' name='prediction'>
+                                 <!-- Stock graph of predicted future performance-->
+
+                        </div>
                 </div>
-        </div>
-        <div class="row">
-			<div class='col-md-8' style='padding-left:80px;'>
-				ROI: <TMPL_VAR NAME='ROI'>
-				ROI_ANNUAL: <TMPL_VAR NAME='ROI_ANNUAL'>
-				ROI_AT: <TMPL_VAR NAME='ROI_AT'>
-				ROI_AT_ANNUAL: <TMPL_VAR NAME='ROI_AT_ANNUAL'>
-					
-
-				<form action='portfolio.pl'>
-					<input type='text' name='initialAmnt' placeholder='Initial Investment' />
-					<input type='text' name='tradeCost' placeholder='Trade Cost' />
-					<input type='hidden' name='act' value='stockHistory' />
-					<input type='hidden' name='symbol' value="<TMPL_VAR NAME='CUR_SS'>" />
-					<input type='submit' value='Calculate!' />
-				</form>
-				</div>
-        </div>
- <!-- Stock graph of past performance -->
 
 
- <!-- Stock graph of predicted future performance-->
-   </div>
+                <div class="row">
+        			<div class='col-md-8' style='padding-left:80px;'>
+        				ROI: <TMPL_VAR NAME='ROI'>
+        				ROI_ANNUAL: <TMPL_VAR NAME='ROI_ANNUAL'>
+        				ROI_AT: <TMPL_VAR NAME='ROI_AT'>
+        				ROI_AT_ANNUAL: <TMPL_VAR NAME='ROI_AT_ANNUAL'>
+        					
+
+        				<form action='portfolio.pl'>
+        					<input type='text' name='initialAmnt' placeholder='Initial Investment' />
+        					<input type='text' name='tradeCost' placeholder='Trade Cost' />
+        					<input type='hidden' name='act' value='stockHistory' />
+        					<input type='hidden' name='symbol' value="<TMPL_VAR NAME='CUR_SS'>" />
+        					<input type='submit' value='Calculate!' />
+        				</form>
+        				</div>
+                </div>
+         </div>
         
         <!-- bogus form for logout action -->
         <form id='logoutForm' action='portfolio.pl'><input type='hidden' name='act' value='logout' /></form>

@@ -43,9 +43,7 @@
             <tspan x="698" y="600">Is Stock</tspan>
         </text>
         <rect d="M877.032055,672.907773 L877.032055,757.907773 L962.032055,757.907773 L962.032055,672.907773 L877.032055,672.907773 Z M877.032055,672.907773" id="Rectangle-21" stroke="#979797" stroke-width="3" sketch:type="MSShapeGroup" transform="translate(919.532055, 715.407773) rotate(-45.000000) translate(-919.532055, -715.407773) " x="877.032055" y="672.907773" width="85" height="85"></rect>
-        <rect d="M883.509819,680.111989 L883.509819,750.111989 L955.509819,750.111989 L955.509819,680.111989 L883.509819,680.111989 Z M883.509819,680.111989" id="Rectangle-21" stroke="#979797" stroke-width="3" sketch:type="MSShapeGroup" transform="translate(919.509819, 715.111989) rotate(-45.000000) translate(-919.509819, -715.111989) " x="883.509819" y="680.111989" width="72" height="70"></rect>
         <rect d="M505.032055,671.907773 L505.032055,756.907773 L590.032055,756.907773 L590.032055,671.907773 L505.032055,671.907773 Z M505.032055,671.907773" id="Rectangle-21" stroke="#979797" stroke-width="3" sketch:type="MSShapeGroup" transform="translate(547.532055, 714.407773) rotate(-45.000000) translate(-547.532055, -714.407773) " x="505.032055" y="671.907773" width="85" height="85"></rect>
-        <rect d="M511.509819,679.111989 L511.509819,749.111989 L583.509819,749.111989 L583.509819,679.111989 L511.509819,679.111989 Z M511.509819,679.111989" id="Rectangle-21" stroke="#979797" stroke-width="3" sketch:type="MSShapeGroup" transform="translate(547.509819, 714.111989) rotate(-45.000000) translate(-547.509819, -714.111989) " x="511.509819" y="679.111989" width="72" height="70"></rect>
         <text id="Instance-of" fill="#000000" sketch:type="MSTextLayer" font-family="Helvetica" font-size="17" font-weight="normal">
             <tspan x="506" y="720">Instance of</tspan>
         </text>
@@ -150,15 +148,13 @@
         </text>
         <path d="M730.5,417.5 L730.5,446.5" id="Line" stroke="#979797" stroke-width="3" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
         <rect d="M453,800 L453,860 L645,860 L645,800 L453,800 Z M453,800" id="Rectangle-17" stroke="#979797" stroke-width="3" sketch:type="MSShapeGroup" x="453" y="800" width="192" height="60"></rect>
-        <rect d="M464,807 L464,852 L634,852 L634,807 L464,807 Z M464,807" id="Rectangle-18" stroke="#979797" stroke-width="3" sketch:type="MSShapeGroup" x="464" y="807" width="170" height="45"></rect>
         <text id="Stocks-Daily-(old)" fill="#000000" sketch:type="MSTextLayer" font-family="Helvetica" font-size="21" font-weight="normal">
             <tspan x="468" y="837">Stocks Daily (old)</tspan>
         </text>
         <path d="M547.5,772.5 L547.5,801.5" id="Line" stroke="#979797" stroke-width="3" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
         <rect d="M825,800 L825,860 L1017,860 L1017,800 L825,800 Z M825,800" id="Rectangle-17" stroke="#979797" stroke-width="3" sketch:type="MSShapeGroup" x="825" y="800" width="192" height="60"></rect>
-        <rect d="M836,807 L836,852 L1006,852 L1006,807 L836,807 Z M836,807" id="Rectangle-18" stroke="#979797" stroke-width="3" sketch:type="MSShapeGroup" x="836" y="807" width="170" height="45"></rect>
-        <text id="Stocks-Daily-(old)" fill="#000000" sketch:type="MSTextLayer" font-family="Helvetica" font-size="21" font-weight="normal">
-            <tspan x="840" y="837">Stocks Daily (old)</tspan>
+        <text id="Stocks-New" fill="#000000" sketch:type="MSTextLayer" font-family="Helvetica" font-size="21" font-weight="normal">
+            <tspan x="864" y="837">Stocks New</tspan>
         </text>
         <path d="M919.5,772.5 L919.5,801.5" id="Line" stroke="#979797" stroke-width="3" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
         <path d="M729.5,503.5 L729.5,536.5" id="Line" stroke="#979797" stroke-width="3" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
