@@ -208,7 +208,7 @@ elsif ($loggedin == 1) {
 									# check if stock already in portfolio (result of query must be > 0)
 									my @stockCountArr = eval { ExecSQL($dbuser,$dbpasswd,"SELECT count(*) FROM stocks WHERE symbol = ? AND portfolio = ?","COL",$symbol,$pid); };
 									my $stockCount = $stockCountArr[0];
-									if ($stockCount > 0) {
+									if ($#stockCountArr > 0 and $stockCount > 0) {
 										eval { ExecSQL($dbuser,$dbpasswd,"UPDATE stocks SET quantity = quantity + ? WHERE symbol = ? AND portfolio = ?",undef,$amount,$symbol,$pid); };
 									} else {
 										eval { ExecSQL($dbuser,$dbpasswd,"INSERT INTO stocks (symbol, portfolio, quantity) VALUES (?, ?, ?)",undef,$symbol,$pid,$amount); };
