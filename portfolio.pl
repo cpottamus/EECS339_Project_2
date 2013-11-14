@@ -54,8 +54,6 @@ my $username = '';
 my @pfid = ();
 my $pid = undef;
 
-#print get_matrix_string(['AAPL','IBM','G'],'1/1/99','12/31/00');
-
 # open the HTML Template
 my $toolbarTemplate = HTML::Template->new(filename => 'toolbar.tmpl');
 my $baseTemplate = HTML::Template->new(filename => 'home.tmpl', die_on_bad_params => 0);
@@ -190,7 +188,7 @@ elsif ($loggedin == 1) {
                         my @canames = eval { ExecSQL($dbuser,$dbpasswd,"select name from portfolios where owner = ?",'COL',$username); }; 
                         my @cadata = ();
                         foreach (@canames) {
-                         push(@cadata,{  name => "$_"."'s cash account"} );
+                         push(@cadata,{  name => "$_"} );
                         }
                         $overviewTemplate->param(
                                 CASH_IN_ACCT => $currentAmount[0],
@@ -215,11 +213,10 @@ elsif ($loggedin == 1) {
                                 if (param('type') eq 'deposit') {
                                         #continue;
                                                 eval { ExecSQL($dbuser, $dbpasswd, "UPDATE cash_accts SET amount = amount + ? WHERE owner = ? AND portfolio = ?", undef, $amount, $username, $pid);};
-                                                if(param('cow') ne 'The Bank'){
 
-                                                  #TODO :: Constraint validation (can't take too much money from the other account)
-                                                  my $cowgoesmoo = eval {ExecSQL($dbuser, $dbpasswd, "select pid from portfolios where name=? and owner=?", "COL", param('cow', $username);};
-                                                  eval { ExecSQL($dbuser, $dbpasswd, "UPDATE cash_accts SET amount = amount - ? WHERE owner = ? AND portfolio = ?", undef, $amount, $username, $cowgoesmoo);};
+                                                if(param('otherAcct') ne 'The Bank'){
+                                                  my @cowgoesmoo = eval {ExecSQL($dbuser, $dbpasswd, "select pid from portfolios where name=? and owner=?", "COL", param('otherAcct'), $username);};
+                                                  eval { ExecSQL($dbuser, $dbpasswd, "UPDATE cash_accts SET amount = amount - ? WHERE owner = ? AND portfolio = ?", undef, $amount, $username, $cowgoesmoo[0]);};
                                                 }
                                 } elsif (param('type') eq 'withdraw') {
                                         #continue;
@@ -227,9 +224,9 @@ elsif ($loggedin == 1) {
                                                     $overviewTemplate->param(TRANSACTION_INVALID => 1);
                                                 }else{
                                                   eval { ExecSQL($dbuser, $dbpasswd, "UPDATE cash_accts SET amount = amount - ? WHERE owner = ? AND portfolio = ?", undef, $amount, $username, $pid);};
-                                                  if(param('cow') ne 'The Bank'){
-                                                    my $cowgoesmoo = eval {ExecSQL($dbuser, $dbpasswd, "select pid from portfolios where name=? and owner=?", "COL", param('cow', $username);};
-                                                    eval { ExecSQL($dbuser, $dbpasswd, "UPDATE cash_accts SET amount = amount + ? WHERE owner = ? AND portfolio = ?", undef, $amount, $username, $cowgoesmoo);};
+                                                  if(param('otherAcct') ne 'The Bank'){
+                                                    my @cowgoesmoo = eval {ExecSQL($dbuser, $dbpasswd, "select pid from portfolios where name=? and owner=?", "COL", param('otherAcct'), $username);};
+                                                    eval { ExecSQL($dbuser, $dbpasswd, "UPDATE cash_accts SET amount = amount + ? WHERE owner = ? AND portfolio = ?", undef, $amount, $username, $cowgoesmoo[0]);};
                                                 }
                                                 }
                                 }             
@@ -333,9 +330,13 @@ elsif ($loggedin == 1) {
 			} else { # stockHistory
 				
 				set_generic_params($singleStockTemplate);
+				
 				my $symbol = param('symbol');
 				my $initialInvestment = param('initialAmnt');
 				my $tradeCost = param('tradeCost');
+				
+				my $tableBlob = make_stock_file($symbol);
+				$singleStockTemplate->param(tableblob => $tableBlob);
 				
 				if ($initialInvestment ne undef and $tradeCost ne undef) {
 					my ($lasttotal,$roi,$roi_annual,$lasttotalaftertradecost,$roi_at,$roi_at_annual) = get_shannon_ratchet_data($symbol,$initialInvestment,$tradeCost);
@@ -384,7 +385,7 @@ BEGIN {
 
 # Not ideal: we have to manually make sure parameters are retrieved in the parse function in the same order that they were stored in bake...
 sub parse_cookie {
-        my %cookies = CGI::Cookie->fetch;
+    my %cookies = CGI::Cookie->fetch;
     my $cookie = $cookies{'NUPortfolioCookie'};
     if ($cookie) {
                 ($loggedin,$username) = split(/\//,$cookie->value);
@@ -485,9 +486,12 @@ sub make_stock_hash {
 		my $symbol = @{$_}[0];
 		my $quantity = @{$_}[1];
 		@stockInfo = eval { ExecSQL($dbuser,$dbpasswd,"SELECT timestamp,open,high,low,close,volume FROM (SELECT * FROM stocks_new WHERE symbol = ? UNION SELECT * FROM cs339.StocksDaily WHERE symbol = ? ORDER BY 2 DESC) WHERE rownum <= 1",'ROW',$symbol,$symbol); };
-		my @m = eval { ExecSQL($dbuser, $dbpasswd,"SELECT avg(close) FROM (SELECT * FROM stocks_new WHERE symbol = ? UNION SELECT * FROM cs339.StocksDaily where symbol = ?","COL", $symbol, $symbol);};
+		my @m = eval { ExecSQL($dbuser, $dbpasswd,"SELECT avg(close) FROM (SELECT * FROM stocks_new WHERE symbol = ? UNION SELECT * FROM cs339.StocksDaily where symbol = ?)","COL", $symbol, $symbol);};
            my $mean = $m[0];
-           my @volatility = eval { ExecSQL($dbuser, $dbpasswd,"SELECT sqrt(sum((close - ?)*(close - ?))) FROM (SELECT * FROM stocks_new WHERE symbol = ? UNION SELECT * FROM cs339.StocksDaily where symbol = ?);","COL", $mean, $mean, );};
+           if ($mean == 0) {
+				$mean = 1;
+			}
+           my @volatility = eval { ExecSQL($dbuser, $dbpasswd,"SELECT sqrt(sum((close - ?)*(close - ?))) FROM (SELECT * FROM stocks_new WHERE symbol = ? UNION SELECT * FROM cs339.StocksDaily where symbol = ?)","COL", $mean, $mean,$symbol,$symbol);};
            my $coeff = $volatility[0]/$mean;
 
 		push(@hashList,{symbol => $symbol, timestamp => $stockInfo[0], openval => $stockInfo[1], high => $stockInfo[2], low => $stockInfo[3], closeval => $stockInfo[4], volume => $stockInfo[5], amnt_owned => $quantity, coeff => $coeff});
@@ -580,6 +584,11 @@ sub get_matrix_string {
 }
 
 sub make_stock_file {
+	my $futurePreds = 20;
+	my ($stockSymbol) = @_;
+	my $shellcmd = "./time_series_symbol_project.pl $stockSymbol $futurePreds AR 16";
+	my $str = `$shellcmd`;
+	return $str;
 }
 
 sub parse_date {
