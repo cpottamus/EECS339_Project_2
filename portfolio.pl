@@ -25,7 +25,6 @@ my @sqloutput = ();
 my $dbuser = 'mjg839';
 my $dbpasswd = 'zdu5GU1to';
 
-
 #Stuff for tools generation
 #DONT FORGET TO EDIT YOUR PATH IN MURPHY INSTANCE (TODO)
 #export PATH = $PATH:(path to the tools folder in project)
@@ -302,13 +301,14 @@ elsif ($loggedin == 1) {
 			$pfname = param('pfname');
 			if ($action eq 'stockStats') {
 				set_generic_params($stockStatTemplate);
-				$stockStatTemplate->param(corr_matrix => get_matrix_string(['AAPL','IBM','G','MSFT','GOOG','INTC'],'1/1/99','12/31/00'));
-                        #TODO: param(date)'s for selecting time interval
-                                      #-pass total calculated beta in params,
-                                      #-pass hash of each coefficient of variation & beta estimate for every stock.
-                                      #-pass matrix hash for matrix generation.
+				my $fromtime = param('startDate');
+				my $totime = param('endDate');
+				if ($fromtime ne undef and $totime ne undef) {
+					($fromtime,$totime) = (parse_date($fromtime),parse_date($totime));
+					
+					$stockStatTemplate->param(corr_matrix => get_matrix_string(['AAPL','IBM','G','MSFT','GOOG','INTC'],$fromtime,$totime));
 
-
+				}
                         bake_cookie();
 				print $stockStatTemplate->output;
 			} else { # stockHistory
@@ -507,7 +507,7 @@ sub user_invite {
         my $link = "http://murphy.wot.eecs.northwestern.edu/~mjg839/portfolio/portfolio.pl?act=register_confirm&run=1&user=$user&pwd=$pwd";
         
         # creating email text
-        my $subject = "New-Portfolio-Account";
+        my $subject = "NewPortfolioAccount";
         my $content = "Click the link below to setup your account. \n\n\n $link";
         
         
@@ -553,4 +553,15 @@ sub get_matrix_string {
 	my $shellcmd = "./get_covar.pl --field1=close --field2=close --from='$from' --to='$to' $listOfStockString";
 	my $str = `$shellcmd`;
 	return $str;
+}
+
+sub parse_date {
+		my ($date) = @_;
+		# YYYY-MM-DD
+		my $YYYY = substr $date,0,4;
+		my $MM = substr $date,5,2;
+		my $DD = substr $date,8,2;
+		
+		my $MMDDYY = $MM . "/" . $DD . "/" . (substr $YYYY,2,2);
+		return $MMDDYY;
 }
