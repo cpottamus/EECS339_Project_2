@@ -13,11 +13,15 @@ $(document).ready(function() {
 	});
 	
 	$('#depositBtn').click(function() {
+		var s = $('moo option:selected').text();
+		var cow = $("<input>").attr("type", "hidden").attr("name", "type").val(s);
 		var input = $("<input>").attr("type", "hidden").attr("name", "type").val("deposit");
 		$('#cashAcctMovements').append($(input));
 		$('#cashAcctMovements').submit();
 	});
 	$('#withdrawBtn').click(function() {
+		var s = $('moo option:selected').text();
+		var cow = $("<input>").attr("type", "hidden").attr("name", "type").val(s);
 		var input = $("<input>").attr("type", "hidden").attr("name", "type").val("withdraw");
 		$('#cashAcctMovements').append($(input));
 		$('#cashAcctMovements').submit();

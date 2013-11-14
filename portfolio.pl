@@ -192,7 +192,7 @@ elsif ($loggedin == 1) {
                         my @canames = eval { ExecSQL($dbuser,$dbpasswd,"select name from portfolios where owner = ?",'COL',$username); }; 
                         my @cadata = ();
                         foreach (@canames) {
-                         push(@cadata,{  name => "$_"} );
+                         push(@cadata,{  name => "$_"."'s cash account"} );
                         }
                         $overviewTemplate->param(
                                 CASH_IN_ACCT => $currentAmount[0],
@@ -218,12 +218,20 @@ elsif ($loggedin == 1) {
                                 if (param('type') eq 'deposit') {
                                         #continue;
                                                 eval { ExecSQL($dbuser, $dbpasswd, "UPDATE cash_accts SET amount = amount + ? WHERE owner = ? AND portfolio = ?", undef, $amount, $username, $pid);};
+                                                if(param('cow') ne 'The Bank'){
+                                                  my $cowgoesmoo = eval {ExecSQL($dbuser, $dbpasswd, "select pid from portfolios where name=? and owner=?", "COL", param('cow', $username);};
+                                                  eval { ExecSQL($dbuser, $dbpasswd, "UPDATE cash_accts SET amount = amount - ? WHERE owner = ? AND portfolio = ?", undef, $amount, $username, $cowgoesmoo);};
+                                                }
                                 } elsif (param('type') eq 'withdraw') {
                                         #continue;
                                                 if($amount > $currentAmount[0]){
                                                     $overviewTemplate->param(TRANSACTION_INVALID => 1);
                                                 }else{
                                                   eval { ExecSQL($dbuser, $dbpasswd, "UPDATE cash_accts SET amount = amount - ? WHERE owner = ? AND portfolio = ?", undef, $amount, $username, $pid);};
+                                                  if(param('cow') ne 'The Bank'){
+                                                    my $cowgoesmoo = eval {ExecSQL($dbuser, $dbpasswd, "select pid from portfolios where name=? and owner=?", "COL", param('cow', $username);};
+                                                    eval { ExecSQL($dbuser, $dbpasswd, "UPDATE cash_accts SET amount = amount + ? WHERE owner = ? AND portfolio = ?", undef, $amount, $username, $cowgoesmoo);};
+                                                }
                                                 }
                                 }             
                                 bake_cookie();

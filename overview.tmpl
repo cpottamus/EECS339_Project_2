@@ -1,63 +1,63 @@
 <html>
-  <head>
-    <title>Portfolio Manager</title>
-    <link rel="stylesheet" type="text/css" href="./portfolio.css" />
-    <link href="css/bootstrap.css" rel="stylesheet" media="screen">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <script type="text/javascript" src="portfolio.js"></script>
-  </head>
-  <body>
+<head>
+	<title>Portfolio Manager</title>
+	<link rel="stylesheet" type="text/css" href="./portfolio.css" />
+	<link href="css/bootstrap.css" rel="stylesheet" media="screen">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="portfolio.js"></script>
+</head>
+<body>
 
-<TMPL_INCLUDE NAME='toolbar.tmpl'>
-     <div>
-		 <TMPL_IF NAME='TRANSACTION_INVALID'>
-			<div>
-				<p>Can't overdraw account. Your withdrawal was not processed.</p>
-			</div>
-		 </TMPL_IF>
-       <h1> <i><TMPL_VAR NAME='CUR_PORTFOLIO'></i>: Management and Performance </h1>
-       <div class="row">
-	 <form action='portfolio.pl' name='cashAcctMovements' id='cashAcctMovements'>
-	 <div class="input-group col-md-4" id="manageCashAcctDiv">
-	   <div class="input-group-btn">
-		<button class='btn btn-default' id='depositBtn'>Deposit</button>
-		<button class='btn btn-default' id='withdrawBtn'>Withdraw</button>
-	   </div>
-	   <input type="text" class="form-control" name="bankAmount"/>
-	   <span class="input-group-addon">$</span>
-	<li class="dropdown">
-		<a href="#" class="dropdown-toggle" data-toggle="dropdown">Select Account to move funds to/from<b class="caret"></b></a>
-		<ul class="dropdown-menu">
-			<li><b>The Bank</b></li>
-			<TMPL_LOOP NAME=CASH_ACCOUNTS>
-				<li><TMPL_VAR NAME=NAME></li>
-			</TMPL_LOOP>
-		</ul>
-	</li>
-	 </div>
-	 <div id="moneyInAcct" class="col-md-4">
-		 <h6>Current <b>Portfolio Value</b>: $<TMPL_VAR NAME='PORTFOLIO_VAL'></h6>
-	    <h6>Money in <TMPL_VAR NAME='CUR_PORTFOLIO'>'s Cash Account: $<TMPL_VAR NAME='CASH_IN_ACCT'></h6>
-	 </div>
-		<input type='hidden' name='act' value='depositOrWithdrawCash' />
-		<input type='hidden' name='pfname' value=<TMPL_VAR NAME='CUR_PORTFOLIO'> />
-       </form>
-       </div>
-       <div class="row">
-		   <div class="col-md-12">
+	<TMPL_INCLUDE NAME='toolbar.tmpl'>
+	<div>
+		<TMPL_IF NAME='TRANSACTION_INVALID'>
+		<div>
+			<p>Can't overdraw account. Your withdrawal was not processed.</p>
+		</div>
+		</TMPL_IF>
+		<h1> <i><TMPL_VAR NAME='CUR_PORTFOLIO'></i>: Management and Performance </h1>
+		<div class="row">
+			<form action='portfolio.pl' name='cashAcctMovements' id='cashAcctMovements'>
+				<div class="input-group col-md-4" id="manageCashAcctDiv">
+					<div class="input-group-btn">
+						<button class='btn btn-default' id='depositBtn'>Deposit</button>
+						<button class='btn btn-default' id='withdrawBtn'>Withdraw</button>
+					</div>
+					<input type="text" class="form-control" name="bankAmount"/>
+					<span class="input-group-addon">$</span>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Select Account to move funds to/from<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><b>The Bank</b></li>
+							<TMPL_LOOP NAME=CASH_ACCOUNTS>
+							<li><TMPL_VAR NAME=NAME></li>
+							</TMPL_LOOP>
+						</ul>
+					</li>
+				</div>
+				<div id="moneyInAcct" class="col-md-4">
+					<h6>Current <b>Portfolio Value</b>: $<TMPL_VAR NAME='PORTFOLIO_VAL'></h6>
+					<h6>Money in <TMPL_VAR NAME='CUR_PORTFOLIO'>'s Cash Account: $<TMPL_VAR NAME='CASH_IN_ACCT'></h6>
+				</div>
+				<input type='hidden' name='act' value='depositOrWithdrawCash' />
+				<input type='hidden' name='pfname' value=<TMPL_VAR NAME='CUR_PORTFOLIO'> />
+			</form>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
 				<TMPL_INCLUDE NAME='add_stock_widget.tmpl'>
 			</div>
-       </div>
-       <div class="row">
-	 <div class='panel panel-default' id='overviewStatsPanel'>
-		 <form id='viewStockListForm' action='portfolio.pl'>
-			 <input type='hidden' name='act' value='viewStockList' />
-			<input type='hidden' name='pfname' value=<TMPL_VAR NAME='CUR_PORTFOLIO'> />
-			<button id='viewListOfStockBtn' class='btn btn-info'>View List of Stocks</button>
-		 </form>
-	 </div>
-     </div>
-   </div>
-   </body>
+		</div>
+		<div class="row">
+			<div class='panel panel-default' id='overviewStatsPanel'>
+				<form id='viewStockListForm' action='portfolio.pl'>
+					<input type='hidden' name='act' value='viewStockList' />
+					<input type='hidden' name='pfname' value=<TMPL_VAR NAME='CUR_PORTFOLIO'> />
+					<button id='viewListOfStockBtn' class='btn btn-info'>View List of Stocks</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
 </html>
