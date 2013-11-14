@@ -19,6 +19,7 @@ my $dbpasswd = 'zdu5GU1to';
 # state variables
 my $loggedin = 0;
 my $pfname = param('pfname');
+my $transactionFailed = param('transact_failed');
 my $username = '';
 my @pfid = ();
 my $pid = undef;
@@ -30,7 +31,7 @@ my $baseTemplate = HTML::Template->new(filename => 'home.tmpl', die_on_bad_param
 my $overviewTemplate = HTML::Template->new(filename => 'overview.tmpl');
 my $registerTemplate = HTML::Template->new(filename => 'register.tmpl', die_on_bad_params => 0);
 my $registerConfirmTemplate = HTML::Template->new(filename => 'registerconfirm.tmpl', die_on_bad_params => 0);
-my $stocklistTemplate = HTML::Template->new(filename => 'stocklist.tmpl', global_vars => 1);
+my $stocklistTemplate = HTML::Template->new(filename => 'stocklist.tmpl', global_vars => 1, die_on_bad_params => 0);
 my $tradingStrategyTemplate = HTML::Template->new(filename => 'tradingStrategy.tmpl', die_on_bad_params => 0);
 my $singleStockTemplate = HTML::Template->new(filename => 'singleStock.tmpl');
 my $stockStatTemplate = HTML::Template->new(filename => 'stat.tmpl');
@@ -162,7 +163,7 @@ elsif ($loggedin == 1) {
                         }
                         elsif ($action eq 'depositOrWithdrawCash') {
                                 my $amount = param('bankAmount');
-                                $pid = get_current_pid();
+                                
                                 if (param('type') eq 'deposit') {
                                         #continue;
                                                 eval { ExecSQL($dbuser, $dbpasswd, "UPDATE cash_accts SET amount = amount + ? WHERE owner = ? AND portfolio = ?", undef, $amount, $username, $pid);};
@@ -180,16 +181,80 @@ elsif ($loggedin == 1) {
                                 $overviewTemplate->param(CASH_IN_ACCT => $cash[0]);
                                 print $overviewTemplate->output;
                         }
-        } elsif ($action eq 'viewStockList') {
+                    } elsif ($action eq 'buyOrSellStock') {
+							$pid = get_current_pid();
+							
+							my $symbol = param('stockSymbol');
+							my $type = param('type');
+							my $amount = param('amount');
+							
+							if ($type eq 'buy') {
+								# Find stock price
+								my @closeArr = eval { ExecSQL($dbuser,$dbpasswd,"SELECT close FROM (SELECT * FROM stocks_new WHERE symbol = ? UNION SELECT * FROM cs339.StocksDaily WHERE symbol = ? ORDER BY 2 DESC) WHERE rownum <= 1","COL",$symbol,$symbol); };
+								my $close = $closeArr[0];
+								# Check if necessary amount of money in cash account (must be >= amount needed to buy stocks)
+								my @cashAvailableArr = eval { ExecSQL($dbuser,$dbpasswd,"SELECT amount FROM cash_accts WHERE portfolio = ?","COL",$pid); };		
+								my $cashAvailable = $cashAvailableArr[0];					
+								if ($cashAvailable >= ($close * $amount)) {
+									# check if stock already in portfolio (result of query must be > 0)
+									my @stockCountArr = eval { ExecSQL($dbuser,$dbpasswd,"SELECT count(*) FROM stocks WHERE symbol = ? AND portfolio = ?","COL",$symbol,$pid); };
+									my $stockCount = $stockCountArr[0];
+									if ($stockCount > 0) {
+										eval { ExecSQL($dbuser,$dbpasswd,"UPDATE stocks SET quantity = quantity + ? WHERE symbol = ? AND portfolio = ?",undef,$amount,$symbol,$pid); };
+									} else {
+										eval { ExecSQL($dbuser,$dbpasswd,"INSERT INTO stocks (symbol, portfolio, quantity) VALUES (?, ?, ?)",undef,$symbol,$pid,$amount); };
+									}
+									# Update cash account
+									eval { ExecSQL($dbuser,$dbpasswd,"UPDATE cash_accts SET amount = amount - ? WHERE portfolio = ? and owner = ?",undef,$close * $amount,$pid,$username); };
+									
+									# voodoo magic redirect
+									my $redirectUrl = "portfolio.pl?act=viewStockList&pfname=$pfname";
+									print "Location: $redirectUrl\n\n";
+								}
+								## if not, tell the user as much.
+								else {
+									my $redirectUrl = "portfolio.pl?act=viewStockList&pfname=$pfname&transact_failed=1";
+									print "Location: $redirectUrl\n\n";
+								}
+							} else { # type eq sell
+								# Find stock price
+								my @closeArr = eval { ExecSQL($dbuser,$dbpasswd,"SELECT close FROM (SELECT * FROM stocks_new WHERE symbol = ? UNION SELECT * FROM cs339.StocksDaily WHERE symbol = ? ORDER BY 2 DESC) WHERE rownum <= 1","COL",$symbol,$symbol); };
+								my $close = $closeArr[0];
+								
+								# Check if stock is in portfolio in at least amount specified
+								my @stockAmnt = eval { ExecSQL($dbuser,$dbpasswd,"SELECT quantity FROM stocks WHERE symbol = ? AND portfolio = ?","COL",$symbol,$pid); };
+								
+								if ($stockAmnt[0] >= $amount) {
+									# If passes, update stocks and cash account of portfolio
+									eval { ExecSQL($dbuser,$dbpasswd,"UPDATE stocks SET quantity = quantity - ? WHERE symbol = ? AND portfolio = ?",undef,$amount,$symbol,$pid); };
+									eval { ExecSQL($dbuser,$dbpasswd,"UPDATE cash_accts SET amount = amount + ? WHERE portfolio = ? and owner = ?",undef,$amount * $close,$pid,$username); };
+	
+									# If no stocks of given symbol exist in portfolio, delete row
+									@stockAmnt = eval { ExecSQL($dbuser,$dbpasswd,"SELECT quantity FROM stocks WHERE symbol = ? AND portfolio = ?","COL",$symbol,$pid); };
+									if ($stockAmnt[0] <= 0) {
+										eval { ExecSQL($dbuser,$dbpasswd,"DELETE FROM stocks WHERE symbol = ? AND portfolio = ?",undef,$symbol,$pid); }
+									}
+									# voodoo magic redirect
+									my $redirectUrl = "portfolio.pl?act=viewStockList&pfname=$pfname";
+									print "Location: $redirectUrl\n\n";
+								}
+								## if not, tell the user as much.
+								else {
+									my $redirectUrl = "portfolio.pl?act=viewStockList&pfname=$pfname&transact_failed=1";
+									print "Location: $redirectUrl\n\n";
+								}
+							}
+						}
+					
+		elsif ($action eq 'viewStockList') {
 			set_generic_params($stocklistTemplate);
-
+			$stocklistTemplate->param(transact_failed => $transactionFailed);
                   #Action items:
 
                   #TODO: Param(type)'s for  adding a stock,
                   #TODO: Param(type)'s for  buying a stock,
                   #TODO: Param(type)'s for  selling a stock,
 
-                  #TODO: See make_stock_hash for list.
 			$stocklistTemplate->param(STOCK_INFO => make_stock_hash());
 			bake_cookie();
 			print $stocklistTemplate->output;
@@ -341,21 +406,19 @@ sub ExecSQL {
 sub make_stock_hash {
 	# select all stocks that belong to portfolio
 	$pid = get_current_pid();
-	my @stockSymbols = eval { ExecSQL($dbuser,$dbpasswd,"select symbol from stocks where portfolio = ?",undef,$pid); };
+	my @stockSymbols = eval { ExecSQL($dbuser,$dbpasswd,"select symbol,quantity from stocks where portfolio = ?",undef,$pid); };
 	# build hash from that list
 	my @hashList = ();
+	my @stockInfo = ();
 	foreach (@stockSymbols) {
 		my $symbol = @{$_}[0];
-		my @stockInfo = eval { ExecSQL($dbuser,$dbpasswd,"SELECT timestamp,open,high,low,close,volume FROM (SELECT * FROM stocks_new WHERE symbol = ? UNION SELECT * FROM cs339.StocksDaily WHERE symbol = ?)",'ROW',$symbol,$symbol); };
+		my $quantity = @{$_}[1];
+		@stockInfo = eval { ExecSQL($dbuser,$dbpasswd,"SELECT timestamp,open,high,low,close,volume FROM (SELECT * FROM stocks_new WHERE symbol = ? UNION SELECT * FROM cs339.StocksDaily WHERE symbol = ?)",'ROW',$symbol,$symbol); };
 		
-		push(@hashList,{symbol => $symbol, timestamp => $stockInfo[0], openval => $stockInfo[1], high => $stockInfo[2], low => $stockInfo[3], closeval => $stockInfo[4], volume => $stockInfo[5] });
+		push(@hashList,{symbol => $symbol, timestamp => $stockInfo[0], openval => $stockInfo[1], high => $stockInfo[2], low => $stockInfo[3], closeval => $stockInfo[4], volume => $stockInfo[5], amnt_owned => $quantity });
 	}
 
     return \@hashList;
-	#my $symbol = $stockInfo[0];
-	#return [{symbol => $stockInfo[0], timestamp => '1/1/72', openval => '1000', high => '1250', low => '750', closeval => '1300', volume => '800' },
-	#		{symbol => "$pid", timestamp => '2', openval => '1000', high => '1250', low => '750', closeval => '1300', volume => '800' }
-	#];
 }
 
 sub set_generic_params {

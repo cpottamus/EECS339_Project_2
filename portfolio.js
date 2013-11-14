@@ -30,4 +30,15 @@ $(document).ready(function() {
 	$('.headerRow').click(function() {
 		$(this).next().toggleClass('hide');
 	});
+	
+	$('#buyStockBtn').click(function() {
+		var input = $("<input>").attr("type", "hidden").attr("name", "type").val("buy");
+		$('#buyOrSellStockForm').append($(input));
+		$('#buyOrSellStockForm').submit();
+	});
+	$('#sellStockBtn').click(function() {
+		var input = $("<input>").attr("type", "hidden").attr("name", "type").val("sell");
+		$('#buyOrSellStockForm').append($(input));
+		$('#buyOrSellStockForm').submit();
+	});
 });

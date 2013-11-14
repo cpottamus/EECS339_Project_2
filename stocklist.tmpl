@@ -16,27 +16,33 @@
 			<TMPL_INCLUDE NAME='add_stock_widget.tmpl'>
 		</div>
 	</div>
+	<TMPL_IF NAME='TRANSACT_FAILED'>
+		<div>Transaction failed, sorry. Try again.</div>
+	</TMPL_IF>
 	<div class='row'>
+		<form action='portfolio.pl' id='buyOrSellStockForm'>
 		<div class="input-group col-md-4">
 			<div class="input-group-btn">
 				<button class='btn btn-default' id='buyStockBtn'>Buy</button>
 				<button class='btn btn-default' id='sellStockBtn'>Sell</button>
 			</div>
-			<input type="text" class="form-control" placeholder="Stock Symbol" />
+			<input type="text" class="form-control" name='stockSymbol' placeholder="Stock Symbol" />
 		</div>
 		<div class="col-md-4 input-group">
-			<input type="text" class="form-control" placeholder="# Of Stocks" />
-			
+			<input type="text" class="form-control" name='amount' placeholder="# Of Stocks" />
 		</div>
+		<input type='hidden' name='act' value='buyOrSellStock' />
+		<input type="hidden" name='pfname' value="<TMPL_VAR NAME='CUR_PORTFOLIO'>" />
+		</form>
 	 </div>
 	 <div class='row'><div class="col-md-8">
 	<a href="portfolio.pl?act=stockStats&pfname=<TMPL_VAR NAME='CUR_PORTFOLIO'>">View Portfolio Statistics</a>
 
 		 <h6> Click a table row for detailed info. </h6>
 		<table class='stockInfoTable'>
-			<tr><th>Time Stamp</th><th>Symbol</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Volume</th></tr>
+			<tr><th>Time Stamp</th><th>Symbol</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Volume</th><th>Owned</th></tr>
 			<TMPL_LOOP NAME='STOCK_INFO'>
-						<tr class='headerRow'><td><TMPL_VAR NAME='TIMESTAMP'></td><td><TMPL_VAR NAME='SYMBOL'></td><td><TMPL_VAR NAME='OPENVAL'></td><td><TMPL_VAR NAME='HIGH'></td><td><TMPL_VAR NAME='LOW'></td><td><TMPL_VAR NAME='CLOSEVAL'></td><td><TMPL_VAR NAME='VOLUME'></td></tr>
+						<tr class='headerRow'><td><TMPL_VAR NAME='TIMESTAMP'></td><td><TMPL_VAR NAME='SYMBOL'></td><td><TMPL_VAR NAME='OPENVAL'></td><td><TMPL_VAR NAME='HIGH'></td><td><TMPL_VAR NAME='LOW'></td><td><TMPL_VAR NAME='CLOSEVAL'></td><td><TMPL_VAR NAME='VOLUME'></td><td><b><TMPL_VAR NAME='AMNT_OWNED'></b></td></tr>
 						<tr class='detailRow hide'><td colspan=7><a href="portfolio.pl?act=stockHistory&pfname=<TMPL_VAR NAME='CUR_PORTFOLIO'>&symbol=<TMPL_VAR NAME='SYMBOL'>">Stock History (click me)</a></td></tr>
 			</TMPL_LOOP>
 		</table>
