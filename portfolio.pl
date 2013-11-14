@@ -10,6 +10,14 @@ use HTML::Template;
 
 my $debug = 0;
 
+#set environment variables
+local $ENV{PORTF_DBMS}='oracle';
+local $ENV{PORTF_DB}='cs339';
+local $ENV{PORTF_DBUSER}='mjg839';
+local $ENV{PORTF_DBPASS}='zdu5GU1to';
+
+local $ENV{PATH}='/home/mjg839/www/portfolio:$ENV{PATH}';
+
 my @sqlinput = ();
 my @sqloutput = ();
 
@@ -33,7 +41,7 @@ my $registerTemplate = HTML::Template->new(filename => 'register.tmpl', die_on_b
 my $registerConfirmTemplate = HTML::Template->new(filename => 'registerconfirm.tmpl', die_on_bad_params => 0);
 my $stocklistTemplate = HTML::Template->new(filename => 'stocklist.tmpl', global_vars => 1, die_on_bad_params => 0);
 my $tradingStrategyTemplate = HTML::Template->new(filename => 'tradingStrategy.tmpl', die_on_bad_params => 0);
-my $singleStockTemplate = HTML::Template->new(filename => 'singleStock.tmpl');
+my $singleStockTemplate = HTML::Template->new(filename => 'singleStock.tmpl', die_on_bad_params => 0);
 my $stockStatTemplate = HTML::Template->new(filename => 'stat.tmpl');
 my $createPortfolioTemplate = HTML::Template->new(filename => 'createportfolio.tmpl', die_on_bad_params => 0);
 
@@ -258,11 +266,6 @@ elsif ($loggedin == 1) {
 		elsif ($action eq 'viewStockList') {
 			set_generic_params($stocklistTemplate);
 			$stocklistTemplate->param(transact_failed => $transactionFailed);
-                  #Action items:
-
-                  #TODO: Param(type)'s for  adding a stock,
-                  #TODO: Param(type)'s for  buying a stock,
-                  #TODO: Param(type)'s for  selling a stock,
 
 			$stocklistTemplate->param(STOCK_INFO => make_stock_hash());
 			bake_cookie();
@@ -273,7 +276,6 @@ elsif ($loggedin == 1) {
 			print $tradingStrategyTemplate->output;
 	  } elsif (($action eq 'stockStats') or ($action eq 'stockHistory')) {
 			$pfname = param('pfname');
-			my $symbolName = param('symbol');
 			if ($action eq 'stockStats') {
 				set_generic_params($stockStatTemplate);
 				
@@ -286,12 +288,26 @@ elsif ($loggedin == 1) {
                         bake_cookie();
 				print $stockStatTemplate->output;
 			} else { # stockHistory
+				
 				set_generic_params($singleStockTemplate);
+				my $symbol = param('symbol');
+				my $initialInvestment = param('initialAmnt');
+				my $tradeCost = param('tradeCost');
+				
+				if ($initialInvestment ne undef and $tradeCost ne undef) {
+					my ($lasttotal,$roi,$roi_annual,$lasttotalaftertradecost,$roi_at,$roi_at_annual) = get_shannon_ratchet_data($symbol,$initialInvestment,$tradeCost);
+					$singleStockTemplate->param(
+						ROI => $roi,
+						ROI_ANNUAL => $roi_annual,
+						ROI_AT => $roi_at,
+						ROI_AT_ANNUAL => $roi_at_annual
+					);
+				}
 
-                      #TODO: make a param hash makeStockHistory, this will contain all of the historical/current data for a stock, for use in JS graph creation.
+				#TODO: make a param hash makeStockHistory, this will contain all of the historical/current data for a stock, for use in JS graph creation.
 
-                      #TODO: call trading strategy and pass the stuff to param to generate predicted value chart 
-				$singleStockTemplate->param(cur_ss => $symbolName);
+				#TODO: call trading strategy and pass the stuff to param to generate predicted value chart 
+				$singleStockTemplate->param(cur_ss => $symbol);
 				bake_cookie();
 				print $singleStockTemplate->output;
 			}
@@ -487,4 +503,12 @@ sub user_invite {
 sub get_current_pid {
 	@pfid = eval {ExecSQL($dbuser, $dbpasswd, "select pid from portfolios where name=? and owner=?", "COL", $pfname, $username);};
 	return $pfid[0];	
+}
+
+sub get_shannon_ratchet_data {
+	my ($symbol,$initialcash,$tradingcost) = @_;
+	my $shellcmd = "./shannon_ratchet.pl $symbol $initialcash $tradingcost";
+	my $out = `$shellcmd`;
+	my ($lasttotal,$roi,$roi_annual,$lasttotalaftertradecost,$roi_at,$roi_at_annual) = split(/,/, $out);
+	return ($lasttotal,$roi,$roi_annual,$lasttotalaftertradecost,$roi_at,$roi_at_annual);
 }

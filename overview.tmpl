@@ -36,7 +36,7 @@
        </form>
        </div>
        <div class="row">
-		   <div class="col-md-8">
+		   <div class="col-md-12">
 				<TMPL_INCLUDE NAME='add_stock_widget.tmpl'>
 			</div>
        </div>
@@ -45,7 +45,7 @@
 		 <form id='viewStockListForm' action='portfolio.pl'>
 			 <input type='hidden' name='act' value='viewStockList' />
 			<input type='hidden' name='pfname' value=<TMPL_VAR NAME='CUR_PORTFOLIO'> />
-			<button id='viewListOfStockBtn'>View List of Stocks</button>
+			<button id='viewListOfStockBtn' class='btn btn-info'>View List of Stocks</button>
 		 </form>
 			<div class='row'>
 			<div class="col-md-6">

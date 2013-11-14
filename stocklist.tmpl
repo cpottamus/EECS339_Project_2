@@ -12,7 +12,7 @@
 <TMPL_INCLUDE NAME='toolbar.tmpl'>
 	<div><h1>Stocks in <i><TMPL_VAR NAME='CUR_PORTFOLIO'></i></h1></div>
 	<div class="row">
-		<div class="col-md-8">
+		<div class="col-md-12">
 			<TMPL_INCLUDE NAME='add_stock_widget.tmpl'>
 		</div>
 	</div>
@@ -35,9 +35,12 @@
 		<input type="hidden" name='pfname' value="<TMPL_VAR NAME='CUR_PORTFOLIO'>" />
 		</form>
 	 </div>
-	 <div class='row'><div class="col-md-8">
-	<a href="portfolio.pl?act=stockStats&pfname=<TMPL_VAR NAME='CUR_PORTFOLIO'>">View Portfolio Statistics</a>
-
+	 <div class='row'><div class="col-md-2"><br />
+	<form action="portfolio.pl"><input type='hidden' name='act' value='stockStats' /><input type='hidden' name='pfname' value="<TMPL_VAR NAME='CUR_PORTFOLIO'>" /><input type='submit' value='View Portfolio Statistics' class='btn btn-info' /></form>
+	</div><div class="col-md-2"><br />
+	<form action="portfolio.pl"><input type='hidden' name='act' value='overview' /><input type='hidden' name='pfname' value="<TMPL_VAR NAME='CUR_PORTFOLIO'>" /><input type='submit' value='Back to Overview' class='btn btn-info' /></form>
+	</div></div>
+	<div class='row'><div class='col-md-12'>
 		 <h6> Click a table row for detailed info. </h6>
 		<table class='stockInfoTable'>
 			<tr><th>Time Stamp</th><th>Symbol</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Volume</th><th>Owned</th></tr>

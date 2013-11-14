@@ -1,12 +1,15 @@
-         <form action='portfolio.pl' name='dailyStockInfo' id='dailyStockInfo'>
-           Timestamp: <input type="text" name="timestamp">
-           Symbol: <input type="text" name="symbol">
-           Opening Price: <input type="text" name="open">
-           Closing Price: <input type="text" name="close">
-           Daily High: <input type="text" name="high">
-           Daily Low: <input type="text" name="low">
-           Daily Trade Volume: <input type="text" name="volume">
-           <input type='submit' value="Submit" />
+     <div class='panel'>    
+		<h4> Add Stock Data: </h4>
+         <form role='form' action='portfolio.pl' name='dailyStockInfo' id='dailyStockInfo' class='form-inline'>
+           <div class='form-group'><input type="text" name="timestamp" class='form-control' placeholder='Timestamp' /></div>
+           <div class='form-group'><input type="text" name="symbol" class='form-control' placeholder='Symbol' /></div>
+           <div class='form-group'><input type="text" name="open" class='form-control' placeholder='Opening Price' /></div>
+           <div class='form-group'><input type="text" name="close" class='form-control' placeholder='Closing Price' /></div>
+           <div class='form-group'><input type="text" name="high" class='form-control' placeholder='Daily High' /></div>
+           <div class='form-group'><input type="text" name="low" class='form-control' placeholder='Daily Low' /></div>
+           <div class='form-group'><input type="text" name="volume" class='form-control' placeholder='Daily Trade Volume' /></div>
+           <input type='submit' value="Submit" class='btn btn-info' />
            <input type='hidden' name='act' value='updateStockInformation' />
            <input type='hidden' name='pfname' value=<TMPL_VAR NAME='CUR_PORTFOLIO'> />
          </form>
+	</div>
