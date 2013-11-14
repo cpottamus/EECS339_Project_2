@@ -26,10 +26,19 @@
 	   </div>
 	   <input type="text" class="form-control" name="bankAmount"/>
 	   <span class="input-group-addon">$</span>
+	<li class="dropdown">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown">Select Account to move funds to/from<b class="caret"></b></a>
+		<ul class="dropdown-menu">
+			<li><b>The Bank</b></li>
+			<TMPL_LOOP NAME=CASH_ACCOUNTS>
+				<li><TMPL_VAR NAME=NAME></li>
+			</TMPL_LOOP>
+		</ul>
+	</li>
 	 </div>
 	 <div id="moneyInAcct" class="col-md-4">
 		 <h6>Current <b>Portfolio Value</b>: $<TMPL_VAR NAME='PORTFOLIO_VAL'></h6>
-	    <h6>Money in <b>Cash</b> Acct.: $<TMPL_VAR NAME='CASH_IN_ACCT'></h6>
+	    <h6>Money in <TMPL_VAR NAME='CUR_PORTFOLIO'>'s Cash Account: $<TMPL_VAR NAME='CASH_IN_ACCT'></h6>
 	 </div>
 		<input type='hidden' name='act' value='depositOrWithdrawCash' />
 		<input type='hidden' name='pfname' value=<TMPL_VAR NAME='CUR_PORTFOLIO'> />
@@ -47,12 +56,6 @@
 			<input type='hidden' name='pfname' value=<TMPL_VAR NAME='CUR_PORTFOLIO'> />
 			<button id='viewListOfStockBtn' class='btn btn-info'>View List of Stocks</button>
 		 </form>
-			<div class='row'>
-			<div class="col-md-2">
-				<h3>Avg. volatility: <TMPL_VAR NAME='PORTFOLIO_AVG_VOL'></h3>
-				<h3>Avg. correlation: <TMPL_VAR NAME='PORTFOLIO_AVG_CORR'></h3>
-			</div>
-			</div>
 	 </div>
      </div>
    </div>

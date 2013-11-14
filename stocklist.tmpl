@@ -43,9 +43,9 @@
 	<div class='row'><div class='col-md-12'>
 		 <h6> Click a table row for detailed info. </h6>
 		<table class='stockInfoTable'>
-			<tr><th>Time Stamp</th><th>Symbol</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Volume</th><th>Owned</th></tr>
+			<tr><th>Time Stamp</th><th>Symbol</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Volume</th><th>Owned</th><th>Coeff. of Var.</th><th>Beta</th></tr>
 			<TMPL_LOOP NAME='STOCK_INFO'>
-						<tr class='headerRow'><td><TMPL_VAR NAME='TIMESTAMP'></td><td><TMPL_VAR NAME='SYMBOL'></td><td><TMPL_VAR NAME='OPENVAL'></td><td><TMPL_VAR NAME='HIGH'></td><td><TMPL_VAR NAME='LOW'></td><td><TMPL_VAR NAME='CLOSEVAL'></td><td><TMPL_VAR NAME='VOLUME'></td><td><b><TMPL_VAR NAME='AMNT_OWNED'></b></td></tr>
+						<tr class='headerRow'><td><TMPL_VAR NAME='TIMESTAMP'></td><td><i><TMPL_VAR NAME='SYMBOL'></i></td><td><TMPL_VAR NAME='OPENVAL'></td><td><TMPL_VAR NAME='HIGH'></td><td><TMPL_VAR NAME='LOW'></td><td><TMPL_VAR NAME='CLOSEVAL'></td><td><TMPL_VAR NAME='VOLUME'></td><td><b><TMPL_VAR NAME='AMNT_OWNED'></b></td><td><TMPL_VAR NAME='COEFF'></td><td><TMPL_VAR NAME='BETA'></td></tr>
 						<tr class='detailRow hide'><td colspan=7><a href="portfolio.pl?act=stockHistory&pfname=<TMPL_VAR NAME='CUR_PORTFOLIO'>&symbol=<TMPL_VAR NAME='SYMBOL'>">Stock History (click me)</a></td></tr>
 			</TMPL_LOOP>
 		</table>

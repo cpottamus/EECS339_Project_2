@@ -190,13 +190,24 @@ elsif ($loggedin == 1) {
                         my @portfolioVal = eval { ExecSQL($dbuser,$dbpasswd,"SELECT sum(d.close * s.quantity) FROM (SELECT * FROM stocks_new WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?) UNION SELECT * FROM cs339.StocksDaily WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?)) d INNER JOIN stocks s ON d.symbol = s.symbol WHERE s.portfolio = ? AND d.symbol NOT IN (SELECT symbol FROM (SELECT * FROM stocks_new WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?) UNION SELECT * FROM cs339.StocksDaily WHERE symbol IN (SELECT symbol FROM stocks WHERE portfolio = ?)) sd WHERE d.timestamp < sd.timestamp)","COL",$pid,$pid,$pid,$pid,$pid); };
                                                 
                         #TODO::: logic to calculate portfolio value, average volatility, and correlation
-
+                        my @canames = eval { ExecSQL($dbuser,$dbpasswd,"select name from portfolios where owner = ?",'COL',$username); }; 
+                        my @cadata = ();
+                        foreach (@canames) {
+                         push(@cadata,{  name => "$_"} );
+                        }
                         $overviewTemplate->param(
                                 CASH_IN_ACCT => $currentAmount[0],
                                 PORTFOLIO_VAL => $portfolioVal[0],
                                 PORTFOLIO_AVG_VOL => 0.5,
                                 PORTFOLIO_AVG_CORR => 0.8
+
+                                CASH_ACCOUNTS => \@cadata,
                         );
+  
+
+
+
+
                         if ($action eq 'overview') {
                                 # bake the updated cookie and render template
                                 bake_cookie();
@@ -459,14 +470,19 @@ sub make_stock_hash {
 	$pid = get_current_pid();
 	my @stockSymbols = eval { ExecSQL($dbuser,$dbpasswd,"select symbol,quantity from stocks where portfolio = ?",undef,$pid); };
 	# build hash from that list
-	my @hashList = ();
-	my @stockInfo = ();
+      my @hashList = ();
+      my @stockInfo = ();
+
 	foreach (@stockSymbols) {
 		my $symbol = @{$_}[0];
 		my $quantity = @{$_}[1];
 		@stockInfo = eval { ExecSQL($dbuser,$dbpasswd,"SELECT timestamp,open,high,low,close,volume FROM (SELECT * FROM stocks_new WHERE symbol = ? UNION SELECT * FROM cs339.StocksDaily WHERE symbol = ? ORDER BY 2 DESC) WHERE rownum <= 1",'ROW',$symbol,$symbol); };
-		
-		push(@hashList,{symbol => $symbol, timestamp => $stockInfo[0], openval => $stockInfo[1], high => $stockInfo[2], low => $stockInfo[3], closeval => $stockInfo[4], volume => $stockInfo[5], amnt_owned => $quantity });
+		my @m = eval { ExecSQL($dbuser, $dbpasswd,"SELECT avg(close) FROM (SELECT * FROM stocks_new WHERE symbol = ? UNION SELECT * FROM cs339.StocksDaily where symbol = ?","COL", $symbol, $symbol);};
+           my $mean = $m[0];
+           my @volatility = eval { ExecSQL($dbuser, $dbpasswd,"SELECT sqrt(sum((close - ?)*(close - ?))) FROM (SELECT * FROM stocks_new WHERE symbol = ? UNION SELECT * FROM cs339.StocksDaily where symbol = ?);","COL", $mean, $mean, );};
+           my $coeff = $volatility[0]/$mean;
+
+		push(@hashList,{symbol => $symbol, timestamp => $stockInfo[0], openval => $stockInfo[1], high => $stockInfo[2], low => $stockInfo[3], closeval => $stockInfo[4], volume => $stockInfo[5], amnt_owned => $quantity, coeff => $coeff});
 	}
 
     return \@hashList;
@@ -553,4 +569,8 @@ sub get_matrix_string {
 	my $shellcmd = "./get_covar.pl --field1=close --field2=close --from='$from' --to='$to' $listOfStockString";
 	my $str = `$shellcmd`;
 	return $str;
+}
+
+sub make_stock_file {
+
 }
