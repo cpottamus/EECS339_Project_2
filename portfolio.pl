@@ -305,8 +305,9 @@ elsif ($loggedin == 1) {
 				my $totime = param('endDate');
 				if ($fromtime ne undef and $totime ne undef) {
 					($fromtime,$totime) = (parse_date($fromtime),parse_date($totime));
-					
-					$stockStatTemplate->param(corr_matrix => get_matrix_string(['AAPL','IBM','G','MSFT','GOOG','INTC'],$fromtime,$totime));
+					$pid = get_current_pid();
+					my @stocks = eval { ExecSQL($dbuser,$dbpasswd,"SELECT symbol FROM stocks WHERE portfolio = ?",'COL',$pid); };
+					$stockStatTemplate->param(corr_matrix => get_matrix_string(\@stocks,$fromtime,$totime));
 
 				}
                         bake_cookie();
