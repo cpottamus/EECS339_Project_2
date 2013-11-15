@@ -28,7 +28,6 @@ $(document).ready(function() {
 		$('#cashAcctMovements').append($(cow));
 		$('#cashAcctMovements').submit();
 	});
-	
 	$('#viewListOfStocksBtn').click(function() {
 		$('#viewStockListForm').submit();
 	});

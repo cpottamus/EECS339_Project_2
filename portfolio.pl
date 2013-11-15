@@ -331,7 +331,8 @@ elsif ($loggedin == 1) {
 				$totime = param('endDate');
 				$fromtime2 = param('startDate2');
 				$totime2 = param('endDate2');
-				$bSymbol = param('bSymbol');
+				#$bSymbol = param('bSymbol');
+				$bSymbol = 'GOOG';
 
 
 				if($fromtime2 ne undef and $totime2 ne undef and $bSymbol ne undef){
