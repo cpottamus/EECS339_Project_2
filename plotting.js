@@ -23,9 +23,6 @@ function create_graph(){
 		xax.push(datac.xhist[i]);
 		yax.push(datac.yhist[i]);
 	}
-	for(j=0; j<datac.xfut.length; j++){
-		xax.push(datac.xfut[i]);
-	}
 	var ctx = $("#myChart").get(0).getContext("2d");
 	var ctx2 = $("#myChart2").get(0).getContext("2d");
 	var data = {
