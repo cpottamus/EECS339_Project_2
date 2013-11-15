@@ -13,16 +13,13 @@ $(document).ready(function() {
 	//If it's updates (when prediction is clicked), rerun the perl information, pass up and replot
 	//if this doesnt work, just set a HUGE static number for the SQL statement, and append as selected in JS
 
-for(i=0; i<450; i++)
-
-var c.push(i);
 });
 
 function create_graph(){
 	var datac = parse_table($('#cowmoo').text());
 	var ctx = $("#myChart").get(0).getContext("2d");
 	var data = {
-	labels : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],//Delete
+	labels : datac.xhist,//Delete
 	datasets : [
 		{
 			fillColor : "rgba(220,220,220,0.5)",
