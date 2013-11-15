@@ -383,8 +383,8 @@ elsif ($loggedin == 1) {
 									# voodoo magic redirect
 									my $redirectUrl = "portfolio.pl?act=stockStats&pfname=$pfname";
 									print "Location: $redirectUrl\n\n";
-                        		bake_cookie();
-				print $stockStatTemplate->output;
+                        	#	bake_cookie();
+			#	print $stockStatTemplate->output;
 			} else { # stockHistory
 				
 				set_generic_params($singleStockTemplate);
