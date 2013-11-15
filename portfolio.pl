@@ -326,14 +326,16 @@ elsif ($loggedin == 1) {
 				my $fromtime = undef;
 				my $totime2 = undef;
 				my $totime = undef;
+				my $bSymbole = undef;
 				$fromtime = param('startDate');
 				$totime = param('endDate');
 				$fromtime2 = param('startDate2');
 				$totime2 = param('endDate2');
-				my $bSymbol = 'GOOG';#param('bSymbol');
+				$bSymbol = param('bSymbol');
 
 
 				if($fromtime2 ne undef and $totime2 ne undef){
+=pod
 					($fromtime2, $totime2) = (parse_date($fromtime2), parse_date($totime2));
 					my @m = eval { ExecSQL($dbuser, $dbpasswd,"SELECT avg(close) FROM (SELECT * FROM stocks_new WHERE symbol = ? AND timestamp <= ? AND timestamp >= ? UNION SELECT * FROM cs339.StocksDaily WHERE symbol = ? AND timestamp <= ? AND timestamp >= ?)","COL", $bSymbol, $totime2,$fromtime2, $bSymbol, $totime2, $fromtime2);};
 					my $mean = $m[0];
@@ -370,6 +372,7 @@ elsif ($loggedin == 1) {
 						COEFF => $coeff,
 						BETA =>$beta[0]
 						)
+=cut
 				}
 
 
@@ -380,7 +383,6 @@ elsif ($loggedin == 1) {
 					$stockStatTemplate->param(corr_matrix => get_matrix_string(\@stocks,$fromtime,$totime));
 
 				}
-
                         		bake_cookie();
 				print $stockStatTemplate->output;
 			} else { # stockHistory
