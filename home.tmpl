@@ -12,6 +12,7 @@
 
 	<!-- Page content below this point -->
 
+
 	<div class="jumbotron">
 		<h1>Portfolio Manager</h1>
 		<div class="container">
@@ -28,6 +29,20 @@
 			<h2>Web Information</h2>
 			<p>This will either include all of our SVG/PNG of sitemaps and mockups, or a link to the page that will</p>
 		</div>
+	<hr>	<div class="container">
+			<h2>E/R Diagram</h2>
+			<embed src="http://murphy.wot.eecs.northwestern.edu/~aes426/EECS339_Project_2/webinfo/ER Diagram.svg" />
+		</div>
+	<hr>
+		<div class="container">
+			<h2>Relation Schema</h2>
+			<p>Users(<u>username</u>, password)<br />Portfolios(<u>id</u>, owner, name)<br />Stocks(<u>symbol</u>, <u>portfolio</u>,holdings)<br />CashAccounts(amount,<u>portfolio</u>, <u>owner</u>)<br />StocksNew(<u>symbol</u>, <u>timestamp</u>, open, high, low, close, volume)<br />StocksDaily(<u>symbol</u>, <u>timestamp</u>, open, high, low, close, volume)</p>
+		</div>
+	<hr>
+		<div class="container">
+			<a href='portfolio.pl?act=storyboards'><h2>Storyboards</h2></a>
+			<p>Click here to view our project storyboards</p>
+		</div> 
 	</div>
 	
 	<!-- bogus form for logout action -->

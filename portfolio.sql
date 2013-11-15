@@ -50,4 +50,11 @@ CREATE TABLE stocks_new (
 	PRIMARY KEY(symbol, timestamp)
 );
 
+-- Create New Beta Data Table
+
+CREATE TABLE beta_data(
+	timestamp		number NOT NULL,
+	close			number NOT NULL
+);
+
 quit;

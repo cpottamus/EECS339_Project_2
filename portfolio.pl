@@ -14,16 +14,16 @@ my $debug = 0;
 #set environment variables
 local $ENV{PORTF_DBMS}='oracle';
 local $ENV{PORTF_DB}='cs339';
-local $ENV{PORTF_DBUSER}='mjg839';
-local $ENV{PORTF_DBPASS}='zdu5GU1to';
+local $ENV{PORTF_DBUSER}='ccp655';
+local $ENV{PORTF_DBPASS}='zy20tYMcr';
 
-local $ENV{PATH}='/home/mjg839/www/portfolio:$ENV{PATH}';
+local $ENV{PATH}='/home/ccp655/www/EECS339_Project_2:$ENV{PATH}';
 
 my @sqlinput = ();
 my @sqloutput = ();
 
-my $dbuser = 'mjg839';
-my $dbpasswd = 'zdu5GU1to';
+my $dbuser = 'ccp655';
+my $dbpasswd = 'zy20tYMcr';
 
 #Stuff for tools generation
 #DONT FORGET TO EDIT YOUR PATH IN MURPHY INSTANCE (TODO)
@@ -65,6 +65,7 @@ my $tradingStrategyTemplate = HTML::Template->new(filename => 'tradingStrategy.t
 my $singleStockTemplate = HTML::Template->new(filename => 'singleStock.tmpl', die_on_bad_params => 0);
 my $stockStatTemplate = HTML::Template->new(filename => 'stat.tmpl', die_on_bad_params => 0);
 my $createPortfolioTemplate = HTML::Template->new(filename => 'createportfolio.tmpl', die_on_bad_params => 0);
+my $storyboardsTemplate = HTML::Template->new(filename => 'storyboards.tmpl', die_on_bad_params => 0);
 
 #
 # Get the user action and whether he just wants the form or wants us to
@@ -318,6 +319,52 @@ elsif ($loggedin == 1) {
 				set_generic_params($stockStatTemplate);
 				my $fromtime = param('startDate');
 				my $totime = param('endDate');
+				my $fromtime2 = param('startDate2');
+				my $totime2 = param('endDate2');
+				my $bSymbol = param('bSymbol');
+
+
+				if($fromtime2 ne undef and $totime2 ne undef and $bSymbol ne undef){
+					($fromtime2, $totime2) = (parse_date($fromtime2), parse_date($totime2));
+					
+					my @m = eval { ExecSQL($dbuser, $dbpasswd,"SELECT avg(close) FROM (SELECT * FROM stocks_new WHERE symbol = ? AND timestamp <= ? AND timestamp >= ? UNION SELECT * FROM cs339.StocksDaily WHERE symbol = ? AND timestamp <= ? AND timestamp >= ?)","COL", $bSymbol, $totime2,$fromtime2, $bSymbol, $totime2, $fromtime2);};
+					my $mean = $m[0];
+					if ($mean == 0) {
+						$mean = 1;
+					}
+					my @volatility = eval { ExecSQL($dbuser, $dbpasswd,"SELECT sqrt(sum((close - ?)*(close - ?))) FROM (SELECT * FROM stocks_new WHERE symbol = ? AND timestamp <= ? AND timestamp >= ? UNION SELECT * FROM cs339.StocksDaily where symbol = ? AND timestamp <= ? AND timestamp >= ?)","COL", $mean, $mean,$bSymbol, $totime2, $fromtime2, $bSymbol, $totime2, $fromtime2);};
+					my $coeff = $volatility[0]/$mean;
+
+
+					my @c = eval {ExecSQL($dbuser, $dbpasswd, "SELECT count(*) FROM (SELECT * FROM stocks_new WHERE symbol = ? AND timestamp >= ? AND timestamp <= ? UNION SELECT * FROM cs339.StocksDaily where symbol = ? AND timestamp >= ? AND timestamp <= ?)","COL", $bSymbol, $totime2, $fromtime2, $bSymbol, $totime2, $fromtime2);};
+					my $count = $c[0];
+					
+					#Get market information
+					my @dow = get_DOW_info($fromtime2, $totime2);
+					my $len = $#dow;
+
+					#INCLUDE BETA CALCULATIONS HERE
+					eval {ExecSQL($dbuser, $dbpasswd, "TRUNCATE table beta_data;", undef);};
+					my $query = "INSERT INTO beta_data VALUES";					
+					for(my $i = 0; $i <$len; $i++){
+						$query .= "(" . $array[$i][0] . "," . $array[$i][1] . "), ";
+					}
+					$query .= "(" . $array[$len][0] . "," . $array[$len][1] . ");";
+
+					eval { ExecSQL($dbuser, $dbpasswd, $query, undef);};
+					my @betaMean = eval { ExecSQL($dbuser, $dbpasswd, "SELECT avg(close) FROM beta_data", "COL");};
+					my @recordLen = eval{ ExecSQL($dbuser, $dbpasswd, "SELECT count(*)/2 FROM (SELECT * FROM stocks_new WHERE symbol = ? AND timestamp >= ? AND timestamp <= ? UNION SELECT * FROM cs339.StocksDaily where symbol = ? AND timestamp >= ? AND timestamp <= ?) a UNION (SELECT * FROM beta_data WHERE timestamp >= ? AND timestamp <= ?) b WHERE a.timestamp = b.timestamp", "COL", $bSymbol, $totime2, $fromtime2, $bSymbol, $totime2, $fromtime2);};
+
+
+					my @beta = eval{ ExecSQL($dbuser, $dbpasswd, "SELECT sum((a.close - ?)*(b.close - ?))/(? - 1) FROM (SELECT * FROM stocks_new WHERE symbol = ? AND timestamp >= ? AND timestamp <= ? UNION SELECT * FROM cs339.StocksDaily where symbol = ? AND timestamp >= ? AND timestamp <= ?) a UNION (SELECT * FROM beta_data WHERE timestamp >= ? AND timestamp <= ?) b WHERE a.timestamp = b.timestamp", "COL", $mean, $betaMean[0], @recordLen[0], $bSymbol, $totime2, $fromtime2, $bSymbol, $totime2, $fromtime2);};
+
+					$stockStatTemplate = param(
+						COEFF => $coeff,
+						BETA =>$beta[0]
+						)
+				}
+
+
 				if ($fromtime ne undef and $totime ne undef) {
 					($fromtime,$totime) = (parse_date($fromtime),parse_date($totime));
 					$pid = get_current_pid();
@@ -325,14 +372,14 @@ elsif ($loggedin == 1) {
 					$stockStatTemplate->param(corr_matrix => get_matrix_string(\@stocks,$fromtime,$totime));
 
 				}
-                        bake_cookie();
+                        		bake_cookie();
 				print $stockStatTemplate->output;
 			} else { # stockHistory
 				
 				set_generic_params($singleStockTemplate);
 				
 				my $symbol = param('symbol');
-                      my $futureDate = param('prediction') || 0;
+                      		my $futureDate = param('prediction') || 0;
 				my $initialInvestment = param('initialAmnt');
 				my $tradeCost = param('tradeCost');
 				
@@ -340,30 +387,35 @@ elsif ($loggedin == 1) {
                         $futureDate = 0;
                       }
 				my $tableBlob = make_stock_file($symbol, $futureDate);
-				$singleStockTemplate->param(tableblob => $tableBlob);
+				$singleStockTemplate->param(
+					tableblob => $tableBlob,
+					BETA => $beta
+				);
 				
 				if ($initialInvestment ne undef and $tradeCost ne undef) {
 					my ($lasttotal,$roi,$roi_annual,$lasttotalaftertradecost,$roi_at,$roi_at_annual) = get_shannon_ratchet_data($symbol,$initialInvestment,$tradeCost);
+					
 					$singleStockTemplate->param(
 						ROI => $roi,
 						ROI_ANNUAL => $roi_annual,
 						ROI_AT => $roi_at,
-						ROI_AT_ANNUAL => $roi_at_annual
+						ROI_AT_ANNUAL => $roi_at_annual						
 					);
 				}
 
 
-
-				#TODO: make a param hash makeStockHistory, this will contain all of the historical/current data for a stock, for use in JS graph creation.
-
-				#TODO: call trading strategy and pass the stuff to param to generate predicted value chart 
 				$singleStockTemplate->param(cur_ss => $symbol);
 				bake_cookie();
 				print $singleStockTemplate->output;
 			}
 			
 		}
-} else {
+} elsif ($action eq 'storyboards') {
+                set_generic_params($storyboardsTemplate);
+                bake_cookie();
+                print $storyboardsTemplate->output;
+}
+else {
                 bake_cookie();
                 print $baseTemplate->output;
 }
@@ -585,6 +637,23 @@ sub get_matrix_string {
 	my $shellcmd = "./get_covar.pl --field1=close --field2=close --from='$from' --to='$to' $listOfStockString";
 	my $str = `$shellcmd`;
 	return $str;
+}
+
+sub get_DOW_info {
+	my ($fromDate, $toDate) = @_;
+	my $shellcmd = "./quotehist.pl --close --from='$fromDate' --to='$toDate' '^IXIC'";
+	my $out = `$shellcmd`;
+	#GET the output here....
+	my @pairs = split("\n", $out);
+	my @splitter;
+	my @outArray;
+	for( my $i =0; $i<=$#pairs; $i++){
+		@splitter = split(" ", $pairs[$i]);
+		$outArray[$i][0] = $splitter[0];
+		$outArray[$i][1] = $splitter[1];
+	}
+
+	return @outArray;
 }
 
 sub make_stock_file {
