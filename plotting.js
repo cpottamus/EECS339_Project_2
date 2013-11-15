@@ -19,13 +19,16 @@ function create_graph(){
 	var datac = parse_table($('#cowmoo').text());
 	var xax = [];
 	var yax = [];
-	for(i=0; i<datac.xhist.length; i=i+50){
+	for(i=0; i<datac.xhist.length; i=i+25){
 		xax.push(datac.xhist[i]);
 		yax.push(datac.yhist[i]);
 	}
+	for(j=0; j<datac.xfut.length; j++){
+		xax.push(datac.xfut[i]);
+	}
 	var ctx = $("#myChart").get(0).getContext("2d");
 	var data = {
-	labels : xax,//Delete
+	labels : xax+datac.yfut,//Delete
 	datasets : [
 		{
 			fillColor : "rgba(220,220,220,0.5)",
@@ -33,14 +36,14 @@ function create_graph(){
 			pointColor : "rgba(220,220,220,1)",
 			pointStrokeColor : "#fff",
 			data : yax//[65,59,90,81,56,55,40]//Replace with data.yhist;
-		 }//,
-		// {
-		// 	fillColor : "rgba(151,187,205,0.5)",
-		// 	strokeColor : "rgba(151,187,205,1)",
-		// 	pointColor : "rgba(151,187,205,1)",
-		// 	pointStrokeColor : "#fff",
-		// 	data : datac.yfut//[28,48,40,19,96,27,100]//Replace with data.yfut;
-		// }
+		 },
+		 {
+		 	fillColor : "rgba(151,187,205,0.5)",
+		 	strokeColor : "rgba(151,187,205,1)",
+		 	pointColor : "rgba(151,187,205,1)",
+		 	pointStrokeColor : "#fff",
+		 	data : datac.yfut//[28,48,40,19,96,27,100]//Replace with data.yfut;
+		 }
 	]
 };
 var options = {
