@@ -380,6 +380,9 @@ elsif ($loggedin == 1) {
 					$stockStatTemplate->param(corr_matrix => get_matrix_string(\@stocks,$fromtime,$totime));
 
 				}
+									# voodoo magic redirect
+									my $redirectUrl = "portfolio.pl?act=stockStats&pfname=$pfname";
+									print "Location: $redirectUrl\n\n";
                         		bake_cookie();
 				print $stockStatTemplate->output;
 			} else { # stockHistory
