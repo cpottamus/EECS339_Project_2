@@ -27,6 +27,7 @@ function create_graph(){
 		xax.push(datac.xfut[i]);
 	}
 	var ctx = $("#myChart").get(0).getContext("2d");
+	var ctx2 = $("#myChart2").get(0).getContext("2d");
 	var data = {
 	labels : xax,//Delete
 	datasets : [
@@ -36,7 +37,12 @@ function create_graph(){
 			pointColor : "rgba(220,220,220,1)",
 			pointStrokeColor : "#fff",
 			data : yax//[65,59,90,81,56,55,40]//Replace with data.yhist;
-		 },
+		 }
+	]
+};
+	var data2 = {
+	labels : datac.xfut,
+	datasets : [
 		 {
 		 	fillColor : "rgba(151,187,205,0.5)",
 		 	strokeColor : "rgba(151,187,205,1)",
@@ -45,7 +51,7 @@ function create_graph(){
 		 	data : datac.yfut//[28,48,40,19,96,27,100]//Replace with data.yfut;
 		 }
 	]
-};
+	};
 var options = {
 				
 	//Boolean - If we show the scale above the chart data			
@@ -130,6 +136,10 @@ var options = {
 	
 };
 	var theChart = new Chart(ctx).Line(data,options);
+
+
+
+	var theChart2 = newChart(ctx2).Line(data2,options);
 }
 	
 
