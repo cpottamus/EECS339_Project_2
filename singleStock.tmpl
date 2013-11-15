@@ -6,6 +6,8 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="js/bootstrap.js"></script>
         <script type="text/javascript" src="portfolio.js"></script>
+        <script type="text/javascript" src="plotting.js"></script>
+        <script type="text/javascript" src="js/Chart.js"></script>
 </head>
 <body>
 	<div class='hide' id='cowmoo'><TMPL_VAR NAME='TABLEBLOB'></div>
@@ -26,10 +28,12 @@
                 <div class="row">
                         <div class="jumbotron col-md-2">
                           <!-- Stock graph of past performance -->
-                          
+                          <canvas id="myChart" width="400" height="400"></canvas>
                         </div>
                         <div class="jumbotron col-md-2">
-                                Select a prediction range<input type='date' name='prediction'>
+                                <form action='portfolio.pl' id='updatePredictionRange'                              
+                                Enter how many days to predict<input type='text' id ='prediction' name='prediction'><button class='btn btn-default' id='submit'>Predict</button>
+                                </form>
                                  <!-- Stock graph of predicted future performance-->
 
                         </div>

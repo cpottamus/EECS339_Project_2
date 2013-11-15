@@ -332,10 +332,14 @@ elsif ($loggedin == 1) {
 				set_generic_params($singleStockTemplate);
 				
 				my $symbol = param('symbol');
+                      my $futureDate = param('prediction') || 0;
 				my $initialInvestment = param('initialAmnt');
 				my $tradeCost = param('tradeCost');
 				
-				my $tableBlob = make_stock_file($symbol);
+                      if( $futureDate == undef) {
+                        $futureDate = 0;
+                      }
+				my $tableBlob = make_stock_file($symbol, $futureDate);
 				$singleStockTemplate->param(tableblob => $tableBlob);
 				
 				if ($initialInvestment ne undef and $tradeCost ne undef) {
@@ -584,8 +588,7 @@ sub get_matrix_string {
 }
 
 sub make_stock_file {
-	my $futurePreds = 20;
-	my ($stockSymbol) = @_;
+	my ($stockSymbol, $futurePreds) = @_;
 	my $shellcmd = "./time_series_symbol_project.pl $stockSymbol $futurePreds AR 16";
 	my $str = `$shellcmd`;
 	return $str;
