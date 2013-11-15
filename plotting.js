@@ -136,7 +136,7 @@ var options = {
 
 
 
-	var theChart2 = newChart(ctx2).Line(data2,options);
+	var theChart2 = new Chart(ctx2).Line(data2,options);
 }
 	
 
