@@ -17,7 +17,7 @@ local $ENV{PORTF_DB}='cs339';
 local $ENV{PORTF_DBUSER}='ccp655';
 local $ENV{PORTF_DBPASS}='zy20tYMcr';
 
-local $ENV{PATH}='/home/ccp655/www/EECS339_Project_2:$ENV{PATH}';
+local $ENV{PATH}='/home/ccp655/www/portfolio:$ENV{PATH}';
 
 my @sqlinput = ();
 my @sqloutput = ();
@@ -326,11 +326,12 @@ elsif ($loggedin == 1) {
 				my $fromtime = undef;
 				my $totime2 = undef;
 				my $totime = undef;
+				my $bSymbol = undef;
 				$fromtime = param('startDate');
 				$totime = param('endDate');
 				$fromtime2 = param('startDate2');
 				$totime2 = param('endDate2');
-				my $bSymbol = param('bSymbol');
+				$bSymbol = param('bSymbol');
 
 
 				if($fromtime2 ne undef and $totime2 ne undef and $bSymbol ne undef){
@@ -386,11 +387,12 @@ elsif ($loggedin == 1) {
 			} else { # stockHistory
 				
 				set_generic_params($singleStockTemplate);
-				
+				my $initialInvestment = undef;
+				my $tradeCost = undef;
 				my $symbol = param('symbol');
                       		my $futureDate = param('prediction') || 0;
-				my $initialInvestment = param('initialAmnt');
-				my $tradeCost = param('tradeCost');
+				$initialInvestment = param('initialAmnt');
+				$tradeCost = param('tradeCost');
 				
                       if( $futureDate == undef) {
                         $futureDate = 0;
