@@ -326,18 +326,15 @@ elsif ($loggedin == 1) {
 				my $fromtime = undef;
 				my $totime2 = undef;
 				my $totime = undef;
-				my $bSymbol = undef;
 				$fromtime = param('startDate');
 				$totime = param('endDate');
 				$fromtime2 = param('startDate2');
 				$totime2 = param('endDate2');
-				#$bSymbol = param('bSymbol');
-				$bSymbol = 'GOOG';
+				my $bSymbol = param('bSymbol');
 
-
-				if($fromtime2 ne undef and $totime2 ne undef and $bSymbol ne undef){
+=Pod
+				if($fromtime2 ne undef and $totime2 ne undef){
 					($fromtime2, $totime2) = (parse_date($fromtime2), parse_date($totime2));
-					
 					my @m = eval { ExecSQL($dbuser, $dbpasswd,"SELECT avg(close) FROM (SELECT * FROM stocks_new WHERE symbol = ? AND timestamp <= ? AND timestamp >= ? UNION SELECT * FROM cs339.StocksDaily WHERE symbol = ? AND timestamp <= ? AND timestamp >= ?)","COL", $bSymbol, $totime2,$fromtime2, $bSymbol, $totime2, $fromtime2);};
 					my $mean = $m[0];
 					if ($mean == 0) {
@@ -368,10 +365,10 @@ elsif ($loggedin == 1) {
 
 
 					my @beta = eval{ ExecSQL($dbuser, $dbpasswd, "SELECT sum((a.close - ?)*(b.close - ?))/(? - 1) FROM (SELECT * FROM stocks_new WHERE symbol = ? AND timestamp >= ? AND timestamp <= ? UNION SELECT * FROM cs339.StocksDaily where symbol = ? AND timestamp >= ? AND timestamp <= ?) a UNION (SELECT * FROM beta_data WHERE timestamp >= ? AND timestamp <= ?) b WHERE a.timestamp = b.timestamp", "COL", $mean, $betaMean[0], $recordLen[0], $bSymbol, $totime2, $fromtime2, $bSymbol, $totime2, $fromtime2);};
-
+=cut
 					$stockStatTemplate = param(
-						COEFF => $coeff,
-						BETA =>$beta[0]
+						COEFF => 5,#$coeff,
+						BETA =>6 #$beta[0]
 						)
 				}
 
