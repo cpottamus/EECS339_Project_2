@@ -335,7 +335,7 @@ elsif ($loggedin == 1) {
 
 
 				if($fromtime2 ne undef and $totime2 ne undef){
-=pod
+
 					($fromtime2, $totime2) = (parse_date($fromtime2), parse_date($totime2));
 					my @m = eval { ExecSQL($dbuser, $dbpasswd,"SELECT avg(close) FROM (SELECT * FROM stocks_new WHERE symbol = ? AND timestamp <= ? AND timestamp >= ? UNION SELECT * FROM cs339.StocksDaily WHERE symbol = ? AND timestamp <= ? AND timestamp >= ?)","COL", $bSymbol, $totime2,$fromtime2, $bSymbol, $totime2, $fromtime2);};
 					my $mean = $m[0];
@@ -372,7 +372,6 @@ elsif ($loggedin == 1) {
 						COEFF => $coeff,
 						BETA =>$beta[0]
 						)
-=cut
 				}
 
 
