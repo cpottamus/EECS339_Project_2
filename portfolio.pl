@@ -143,6 +143,10 @@ if ($action eq 'login') {
                 }
                 
                 print $registerConfirmTemplate->output;
+}elsif ($action eq 'storyboards') {
+                set_generic_params($storyboardsTemplate);
+                bake_cookie();
+                print $storyboardsTemplate->output;
 }# all of these actions should only be processed if the user is logged in
 elsif ($loggedin == 1) {
         if ($action eq 'createNewPortfolio') {
@@ -313,14 +317,19 @@ elsif ($loggedin == 1) {
 			set_generic_params($tradingStrategyTemplate);
 			bake_cookie();
 			print $tradingStrategyTemplate->output;
-	  } elsif (($action eq 'stockStats') or ($action eq 'stockHistory')) {
+	  } 
+	 elsif (($action eq 'stockStats') or ($action eq 'stockHistory')) {
 			$pfname = param('pfname');
 			if ($action eq 'stockStats') {
 				set_generic_params($stockStatTemplate);
-				my $fromtime = param('startDate');
-				my $totime = param('endDate');
-				my $fromtime2 = param('startDate2');
-				my $totime2 = param('endDate2');
+				my $fromtime2 = undef;
+				my $fromtime = undef;
+				my $totime2 = undef;
+				my $totime = undef;
+				$fromtime = param('startDate');
+				$totime = param('endDate');
+				$fromtime2 = param('startDate2');
+				$totime2 = param('endDate2');
 				my $bSymbol = param('bSymbol');
 
 
@@ -347,16 +356,16 @@ elsif ($loggedin == 1) {
 					eval {ExecSQL($dbuser, $dbpasswd, "TRUNCATE table beta_data;", undef);};
 					my $query = "INSERT INTO beta_data VALUES";					
 					for(my $i = 0; $i <$len; $i++){
-						$query .= "(" . $array[$i][0] . "," . $array[$i][1] . "), ";
+						$query .= "(" . $dow[$i][0] . "," . $dow[$i][1] . "), ";
 					}
-					$query .= "(" . $array[$len][0] . "," . $array[$len][1] . ");";
+					$query .= "(" . $dow[$len][0] . "," . $dow[$len][1] . ");";
 
 					eval { ExecSQL($dbuser, $dbpasswd, $query, undef);};
 					my @betaMean = eval { ExecSQL($dbuser, $dbpasswd, "SELECT avg(close) FROM beta_data", "COL");};
 					my @recordLen = eval{ ExecSQL($dbuser, $dbpasswd, "SELECT count(*)/2 FROM (SELECT * FROM stocks_new WHERE symbol = ? AND timestamp >= ? AND timestamp <= ? UNION SELECT * FROM cs339.StocksDaily where symbol = ? AND timestamp >= ? AND timestamp <= ?) a UNION (SELECT * FROM beta_data WHERE timestamp >= ? AND timestamp <= ?) b WHERE a.timestamp = b.timestamp", "COL", $bSymbol, $totime2, $fromtime2, $bSymbol, $totime2, $fromtime2);};
 
 
-					my @beta = eval{ ExecSQL($dbuser, $dbpasswd, "SELECT sum((a.close - ?)*(b.close - ?))/(? - 1) FROM (SELECT * FROM stocks_new WHERE symbol = ? AND timestamp >= ? AND timestamp <= ? UNION SELECT * FROM cs339.StocksDaily where symbol = ? AND timestamp >= ? AND timestamp <= ?) a UNION (SELECT * FROM beta_data WHERE timestamp >= ? AND timestamp <= ?) b WHERE a.timestamp = b.timestamp", "COL", $mean, $betaMean[0], @recordLen[0], $bSymbol, $totime2, $fromtime2, $bSymbol, $totime2, $fromtime2);};
+					my @beta = eval{ ExecSQL($dbuser, $dbpasswd, "SELECT sum((a.close - ?)*(b.close - ?))/(? - 1) FROM (SELECT * FROM stocks_new WHERE symbol = ? AND timestamp >= ? AND timestamp <= ? UNION SELECT * FROM cs339.StocksDaily where symbol = ? AND timestamp >= ? AND timestamp <= ?) a UNION (SELECT * FROM beta_data WHERE timestamp >= ? AND timestamp <= ?) b WHERE a.timestamp = b.timestamp", "COL", $mean, $betaMean[0], $recordLen[0], $bSymbol, $totime2, $fromtime2, $bSymbol, $totime2, $fromtime2);};
 
 					$stockStatTemplate = param(
 						COEFF => $coeff,
@@ -388,8 +397,7 @@ elsif ($loggedin == 1) {
                       }
 				my $tableBlob = make_stock_file($symbol, $futureDate);
 				$singleStockTemplate->param(
-					tableblob => $tableBlob,
-					BETA => $beta
+					tableblob => $tableBlob
 				);
 				
 				if ($initialInvestment ne undef and $tradeCost ne undef) {
@@ -410,10 +418,6 @@ elsif ($loggedin == 1) {
 			}
 			
 		}
-} elsif ($action eq 'storyboards') {
-                set_generic_params($storyboardsTemplate);
-                bake_cookie();
-                print $storyboardsTemplate->output;
 }
 else {
                 bake_cookie();
