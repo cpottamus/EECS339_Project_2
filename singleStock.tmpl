@@ -29,18 +29,18 @@
       <div class="jumbotron col-md-12">
         <!-- Stock graph of past performance -->
         <h3>Performance of Stock</h3>
-        <canvas id="myChart" width="inherit" height="400"></canvas>
+        <canvas id="myChart" width="1200" height="400"></canvas>
       </div>
       <div class="jumbotron col-md-12">
         <form action='portfolio.pl' id='updatePredictionRange'>                              
 
-          <div class="input-group col-md-6">
+          <div class="input-group container col-md-6">
             <h3>Enter how many days to predict</h3>
             <input type='text' id ='prediction' name='prediction'>
 
             <button class='btn btn-default' id='submit'>Predict</button>
           </div>
-          <div class="input-group col-md-6">
+          <div class="input-group container col-md-6">
             <h3> Trading Strategy Prediction</h3>
             ROI: <TMPL_VAR NAME='ROI'><br>
             ROI_ANNUAL: <TMPL_VAR NAME='ROI_ANNUAL'><br>

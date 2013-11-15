@@ -28,7 +28,7 @@ function create_graph(){
 	}
 	var ctx = $("#myChart").get(0).getContext("2d");
 	var data = {
-	labels : xax+datac.yfut,//Delete
+	labels : xax,//Delete
 	datasets : [
 		{
 			fillColor : "rgba(220,220,220,0.5)",
