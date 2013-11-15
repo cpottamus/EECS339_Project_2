@@ -21,7 +21,6 @@ $(document).ready(function() {
 function create_graph(){
 	var datac = parse_table($('#cowmoo').text());
 	var ctx = $("#myChart").get(0).getContext("2d");
-	var theChart = new Chart(ctx).Line(data,options);
 	var data = {
 	labels : ["January","February","March","April","May","June","July"],//Delete
 	datasets : [
@@ -40,7 +39,7 @@ function create_graph(){
 		// 	data : datac.yfut//[28,48,40,19,96,27,100]//Replace with data.yfut;
 		// }
 	]
-}
+};
 var options = {
 				
 	//Boolean - If we show the scale above the chart data			
@@ -123,8 +122,11 @@ var options = {
 	//Function - Fires when the animation is complete
 	onAnimationComplete : null
 	
-}	
+};
+	var theChart = new Chart(ctx).Line(data,options);
 }
+	
+
 
 function parse_table(text) {
 	
