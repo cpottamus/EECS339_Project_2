@@ -1,0 +1,25 @@
+<html>
+<head>
+        <title>Storyboards</title>
+        <link rel="stylesheet" type="text/css" href="./portfolio.css" />
+        <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+        <script type="text/javascript" src="portfolio.js"></script>
+</head>
+<body>
+<TMPL_INCLUDE NAME='toolbar.tmpl'>
+
+        <!-- Page content below this point -->
+
+        <div class="jumbotron">
+                <h1>Storyboard</h1>
+                <div class="container">
+                	<embed src="http://murphy.wot.eecs.northwestern.edu/~aes426/EECS339_Project_2/webinfo/storyboard.svg" type="image/svg+xml" />
+		</div>
+        </div>
+
+        <!-- bogus form for logout action -->
+        <form id='logoutForm' action='portfolio.pl'><input type='hidden' name='act' value='logout' /></form>
+</body>
+</html>
