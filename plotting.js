@@ -17,16 +17,22 @@ $(document).ready(function() {
 
 function create_graph(){
 	var datac = parse_table($('#cowmoo').text());
+	var xax = [];
+	var yax = [];
+	for(i=0; i<datac.xhist.length; i=i+50){
+		xax.push(datac.xhist[i]);
+		yax.push(datac.yhist[i]);
+	}
 	var ctx = $("#myChart").get(0).getContext("2d");
 	var data = {
-	labels : datac.xhist,//Delete
+	labels : xax,//Delete
 	datasets : [
 		{
 			fillColor : "rgba(220,220,220,0.5)",
 			strokeColor : "rgba(220,220,220,1)",
 			pointColor : "rgba(220,220,220,1)",
 			pointStrokeColor : "#fff",
-			data : datac.yhist//[65,59,90,81,56,55,40]//Replace with data.yhist;
+			data : yax//[65,59,90,81,56,55,40]//Replace with data.yhist;
 		 }//,
 		// {
 		// 	fillColor : "rgba(151,187,205,0.5)",
