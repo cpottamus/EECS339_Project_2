@@ -326,7 +326,7 @@ elsif ($loggedin == 1) {
 				my $fromtime = undef;
 				my $totime2 = undef;
 				my $totime = undef;
-				my $bSymbole = undef;
+				my $bSymbol = undef;
 				$fromtime = param('startDate');
 				$totime = param('endDate');
 				$fromtime2 = param('startDate2');
